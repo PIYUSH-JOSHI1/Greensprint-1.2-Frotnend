@@ -10,7 +10,7 @@ const CONFIG = {
     
     // Backend API URL (Python Flask on Render)
     // ⚠️ CHANGE THIS after deploying backend to Render!
-    BACKEND_API_URL: 'https://green-sprint-api.onrender.com',
+    BACKEND_API_URL: 'https://greensprint-1-2-backend.onrender.com',
     // For local testing: 'http://localhost:5000'
     
     // Application Settings
