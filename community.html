@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community | Green Sprint</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="assets/css/fontawesome.css">
+    
+    <!-- Bootstrap -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    
+    <style>
+        .community-header {
+            background: linear-gradient(135deg, #2d5a27 0%, #4a9c3f 100%);
+            padding: 50px 40px;
+            border-radius: 20px;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .community-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .community-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .community-tab {
+            padding: 12px 25px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .community-tab:hover, .community-tab.active {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .feed-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .feed-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .feed-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .feed-user-info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .feed-user-info span {
+            font-size: 0.85rem;
+            color: #888;
+        }
+        
+        .feed-content {
+            margin-bottom: 20px;
+        }
+        
+        .feed-content p {
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .feed-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+        
+        .feed-stats {
+            display: flex;
+            gap: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .feed-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .feed-stat:hover {
+            color: var(--primary-color);
+        }
+        
+        .feed-stat.liked {
+            color: #e74c3c;
+        }
+        
+        .comments-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .comments-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        
+        .comment-input-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .comment-input-container input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+        }
+        
+        .comment-input-container input:focus {
+            border-color: var(--primary-color);
+        }
+        
+        .comment-input-container button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .comment-input-container button:hover {
+            transform: scale(1.05);
+        }
+        
+        .like-btn i {
+            transition: all 0.3s ease;
+        }
+        
+        .like-btn:hover i {
+            transform: scale(1.2);
+        }
+        
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .member-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+        
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 4px solid #f0f0f0;
+        }
+        
+        .member-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .member-username {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .member-stats {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .member-stat .value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .member-stat .label {
+            font-size: 0.75rem;
+            color: #888;
+        }
+        
+        .member-badges {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .member-badges span {
+            font-size: 1.2rem;
+        }
+        
+        .create-post-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .create-post-card textarea {
+            width: 100%;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            padding: 15px;
+            resize: none;
+            font-size: 1rem;
+            font-family: inherit;
+            margin-bottom: 15px;
+        }
+        
+        .create-post-card textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+        
+        .create-post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .post-attachments {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .attachment-btn {
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+        
+        .attachment-btn:hover {
+            color: var(--primary-color);
+        }
+        
+        /* Image preview strip */
+        .image-preview-strip {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        
+        .image-preview-item {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #e8f5e9;
+        }
+        
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .image-preview-item .remove-img {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Location & tree tag chips */
+        .post-meta-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .meta-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #e8f5e9;
+            color: #2d5a27;
+            border: 1px solid #c8e6c9;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 500;
+        }
+        
+        .meta-chip.location-chip { background: #e3f2fd; color: #1565c0; border-color: #bbdefb; }
+        .meta-chip.tree-chip { background: #e8f5e9; color: #2d5a27; border-color: #c8e6c9; }
+        
+        /* Location input in post form */
+        .post-location-row, .post-tree-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background: #f8fffe;
+            border: 1px solid #e0f2e0;
+            border-radius: 10px;
+        }
+        
+        .post-location-row input, .post-tree-row input, .post-tree-row select {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 0.9rem;
+            color: #444;
+            outline: none;
+            font-family: inherit;
+        }
+        
+        /* ── BADGE SHOWCASE ── */
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+            padding: 4px 0;
+        }
+        .badge-item {
+            background: white;
+            border-radius: 16px;
+            padding: 22px 16px;
+            text-align: center;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .badge-item.unlocked {
+            border-color: #4a9c3f;
+            background: linear-gradient(160deg, #f0fff4, #fff);
+        }
+        .badge-item.locked {
+            opacity: 0.5;
+            filter: grayscale(60%);
+        }
+        .badge-item:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.12); }
+        .badge-emoji { font-size: 2.6rem; margin-bottom: 8px; line-height: 1; }
+        .badge-name { font-weight: 700; font-size: 0.9rem; color: #1a1a1a; margin-bottom: 4px; }
+        .badge-desc { font-size: 0.75rem; color: #888; line-height: 1.4; }
+        .badge-unlocked-tag {
+            position: absolute; top: 8px; right: 8px;
+            background: #4a9c3f; color: white; font-size: 0.62rem;
+            padding: 2px 7px; border-radius: 8px; font-weight: 700;
+        }
+        .badge-locked-overlay {
+            position: absolute; top: 8px; right: 8px;
+            font-size: 0.9rem; opacity: 0.5;
+        }
+        .badge-earners {
+            font-size: 0.72rem; color: #4a9c3f; font-weight: 600;
+            margin-top: 6px;
+        }
+
+        /* ── MEMBER CARD UPGRADE ── */
+        .member-card {
+            background: white;
+            border-radius: 18px;
+            padding: 24px 20px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            position: relative;
+            border-top: 3px solid transparent;
+        }
+        .member-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 36px rgba(0,0,0,0.13);
+            border-top-color: #4a9c3f;
+        }
+        .member-level-pill {
+            position: absolute; top: 14px; left: 14px;
+            background: linear-gradient(135deg, #2d5a27, #4a9c3f);
+            color: white; font-size: 0.65rem; font-weight: 700;
+            padding: 3px 9px; border-radius: 10px;
+        }
+        .member-avatar-wrap { position: relative; width: 80px; margin: 0 auto 12px; }
+        .member-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #e8f5e9; }
+        .member-online-dot {
+            position: absolute; bottom: 2px; right: 2px;
+            width: 14px; height: 14px; background: #4a9c3f;
+            border-radius: 50%; border: 2px solid white;
+        }
+        .member-location { font-size: 0.75rem; color: #aaa; margin-bottom: 10px; }
+        .member-bio { font-size: 0.78rem; color: #666; margin-bottom: 12px; line-height: 1.4; }
+
+        /* ── CHAT TAB ── */
+        .chat-wrap { display: flex; flex-direction: column; height: 560px; background: white; border-radius: 18px; box-shadow: 0 6px 24px rgba(0,0,0,0.08); overflow: hidden; }
+        .chat-header { padding: 14px 20px; background: linear-gradient(135deg, #2d5a27, #4a9c3f); color: white; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .chat-header h3 { margin: 0; font-size: 1rem; font-weight: 700; }
+        .chat-online { background: rgba(255,255,255,0.2); padding: 2px 10px; border-radius: 10px; font-size: 0.75rem; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; background: #fafffe; }
+        .chat-msg { display: flex; gap: 10px; align-items: flex-end; }
+        .chat-msg.mine { flex-direction: row-reverse; }
+        .chat-msg-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+        .chat-bubble {
+            max-width: 68%;
+            padding: 10px 14px;
+            border-radius: 18px 18px 18px 4px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            font-size: 0.88rem;
+            color: #333;
+            line-height: 1.45;
+        }
+        .chat-msg.mine .chat-bubble {
+            border-radius: 18px 18px 4px 18px;
+            background: linear-gradient(135deg, #2d5a27, #4a9c3f);
+            color: white;
+        }
+        .chat-name-time { font-size: 0.68rem; color: #bbb; margin-bottom: 3px; }
+        .chat-msg.mine .chat-name-time { text-align: right; }
+        .chat-input-bar { padding: 14px 16px; border-top: 1px solid #eee; display: flex; gap: 10px; background: white; flex-shrink: 0; }
+        .chat-input-bar input {
+            flex: 1; padding: 11px 18px;
+            border: 2px solid #e8f5e9; border-radius: 25px;
+            font-size: 0.9rem; font-family: 'Poppins', sans-serif;
+            outline: none; transition: border-color 0.2s;
+        }
+        .chat-input-bar input:focus { border-color: #4a9c3f; }
+        .chat-send-btn {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: linear-gradient(135deg, #2d5a27, #4a9c3f);
+            color: white; border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; transition: transform 0.2s;
+        }
+        .chat-send-btn:hover { transform: scale(1.1); }
+        .chat-system-msg { text-align: center; font-size: 0.72rem; color: #bbb; padding: 4px 0; }
+
+        @media (max-width: 768px) {
+            .community-header { padding: 30px 20px; }
+            .community-header h1 { font-size: 1.8rem; }
+            .members-grid { grid-template-columns: 1fr; }
+            .badge-grid { grid-template-columns: repeat(2, 1fr); }
+            .chat-wrap { height: 480px; }
+        }
+    </style>
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+        <i class="fa fa-bars"></i>
+    </button>
+    
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <img src="assets/images/green spirt (1).png" alt="Green Sprint">
+                <h2>Green Sprint</h2>
+            </div>
+            
+            <ul class="sidebar-nav">
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li><a href="tree-tracker.html"><i class="fa fa-qrcode"></i><span>Plant Tree</span></a></li>
+                <li><a href="my-trees.html"><i class="fa fa-tree"></i><span>My Trees</span></a></li>
+                <li><a href="campaigns.html"><i class="fa fa-bullhorn"></i><span>Campaigns</span></a></li>
+                <li><a href="leaderboard.html"><i class="fa fa-trophy"></i><span>Leaderboard</span></a></li>
+                <li><a href="analytics.html"><i class="fa fa-chart-line"></i><span>Analytics</span></a></li>
+                <li><a href="community.html" class="active"><i class="fa fa-users"></i><span>Community</span></a></li>
+                <li><a href="profile.html"><i class="fa fa-user"></i><span>Profile</span></a></li>
+                <li><a href="#" onclick="logout()"><i class="fa fa-sign-out-alt"></i><span>Logout</span></a></li>
+            </ul>
+            
+            <div class="sidebar-user">
+                <img src="assets/images/default-avatar.png" alt="User" id="sidebar-avatar">
+                <div class="sidebar-user-info">
+                    <h4 id="sidebar-username">User</h4>
+                    <span>Member</span>
+                </div>
+            </div>
+        </aside>
+        
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+        
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Header -->
+            <div class="community-header">
+                <h1>👥 Community</h1>
+                <p>Connect with fellow eco-warriors and share your green journey</p>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="community-tabs">
+                <button class="community-tab active" data-tab="feed" onclick="switchTab('feed')">
+                    <i class="fa fa-newspaper"></i> Feed
+                </button>
+                <button class="community-tab" data-tab="members" onclick="switchTab('members')">
+                    <i class="fa fa-users"></i> Members
+                </button>
+                <button class="community-tab" data-tab="achievements" onclick="switchTab('achievements')">
+                    <i class="fa fa-trophy"></i> Badges
+                </button>
+                <button class="community-tab" data-tab="chat" onclick="switchTab('chat')">
+                    <i class="fa fa-comments"></i> Live Chat
+                </button>
+            </div>
+            
+            <!-- Feed Tab -->
+            <div id="feed-tab" class="tab-content">
+                <!-- Create Post -->
+                <div class="create-post-card">
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+                        <img id="current-user-avatar" src="assets/images/default-avatar.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #e8f5e9;">
+                        <textarea placeholder="Share your tree planting story, progress, or eco-tip..." rows="3" id="post-content" style="flex:1; border:2px solid #e8f5e9; border-radius:12px; padding:12px; resize:none; font-family:inherit; font-size:0.95rem; transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='#e8f5e9'"></textarea>
+                    </div>
+                    
+                    <!-- Image preview strip -->
+                    <div class="image-preview-strip" id="image-preview-strip"></div>
+                    
+                    <!-- Optional: Location -->
+                    <div class="post-location-row" id="location-row" style="display:none;">
+                        <i class="fa fa-map-marker-alt" style="color:#4a9c3f;"></i>
+                        <input type="text" id="post-location-text" placeholder="Add location (e.g. Pune, Maharashtra)">
+                        <button onclick="getUserLocationText()" title="Use my location" style="background:none;border:none;cursor:pointer;color:#4a9c3f;"><i class="fa fa-crosshairs"></i></button>
+                        <button onclick="hideField('location-row')" style="background:none;border:none;cursor:pointer;color:#aaa;"><i class="fa fa-times"></i></button>
+                    </div>
+                    
+                    <!-- Optional: Tree type -->
+                    <div class="post-tree-row" id="tree-type-row" style="display:none;">
+                        <i class="fa fa-tree" style="color:#4a9c3f;"></i>
+                        <select id="post-tree-type" style="flex:1;border:none;background:transparent;font-size:0.9rem;font-family:inherit;outline:none;color:#444;">
+                            <option value="">Select tree type...</option>
+                            <option value="Neem">🌿 Neem</option>
+                            <option value="Banyan">🌳 Banyan</option>
+                            <option value="Mango">🥭 Mango</option>
+                            <option value="Peepal">🍃 Peepal</option>
+                            <option value="Ashoka">🌲 Ashoka</option>
+                            <option value="Gulmohar">🌺 Gulmohar</option>
+                            <option value="Bamboo">🎋 Bamboo</option>
+                            <option value="Teak">🪵 Teak</option>
+                            <option value="Other">🌱 Other</option>
+                        </select>
+                        <button onclick="hideField('tree-type-row')" style="background:none;border:none;cursor:pointer;color:#aaa;"><i class="fa fa-times"></i></button>
+                    </div>
+                    
+                    <div class="create-post-actions">
+                        <div class="post-attachments">
+                            <button class="attachment-btn" onclick="document.getElementById('post-image').click()" title="Add image">
+                                <i class="fa fa-image"></i>
+                            </button>
+                            <button class="attachment-btn" onclick="toggleField('location-row')" title="Add location">
+                                <i class="fa fa-map-marker-alt"></i>
+                            </button>
+                            <button class="attachment-btn" onclick="toggleField('tree-type-row')" title="Tag a tree">
+                                <i class="fa fa-tree"></i>
+                            </button>
+                            <input type="file" id="post-image" accept="image/*" multiple style="display: none;">
+                        </div>
+                        <button class="btn btn-primary" onclick="createPost()" style="padding:10px 28px;">
+                            <i class="fa fa-paper-plane"></i> Post
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Feed -->
+                <div id="feed-container">
+                    <!-- Posts will be loaded here -->
+                    <div style="text-align: center; padding: 50px;">
+                        <i class="fa fa-spinner fa-spin fa-2x" style="color: var(--primary-color);"></i>
+                        <p style="margin-top: 15px;">Loading feed...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Members Tab -->
+            <div id="members-tab" class="tab-content" style="display: none;">
+                <div class="members-grid" id="members-grid">
+                    <!-- Members will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Achievements / Badge Showcase Tab -->
+            <div id="achievements-tab" class="tab-content" style="display: none;">
+                <div style="margin-bottom:20px;">
+                    <h3 style="font-size:1.1rem;font-weight:700;color:#2d5a27;margin-bottom:4px;">🏆 Badge Showcase</h3>
+                    <p style="font-size:0.85rem;color:#888;margin:0;">Earn badges by planting trees, joining campaigns, and being active in the community.</p>
+                </div>
+                <div id="achievements-container"></div>
+            </div>
+
+            <!-- Live Chat Tab -->
+            <div id="chat-tab" class="tab-content" style="display:none;">
+                <div class="chat-wrap">
+                    <div class="chat-header">
+                        <i class="fa fa-comments fa-lg"></i>
+                        <h3>🌍 Green Sprint Community Chat</h3>
+                        <span class="chat-online" id="chat-online-count">● Live</span>
+                    </div>
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="chat-system-msg">Welcome to the Green Sprint community chat! 🌱</div>
+                    </div>
+                    <div class="chat-input-bar">
+                        <input type="text" id="chat-input" placeholder="Share a green thought... 🌿" onkeydown="if(event.key==='Enter')sendChatMessage()">
+                        <button class="chat-send-btn" onclick="sendChatMessage()">
+                            <i class="fa fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/supabase-client.js"></script>
+    <script src="assets/js/auth.js"></script>
+    
+    <script>
+        let currentTab = 'feed';
+        
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+        
+        async function logout() {
+            await AuthService.logout();
+        }
+        
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.community-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.community-tab[data-tab="${tab}"]`).classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+            document.getElementById(`${tab}-tab`).style.display = 'block';
+
+            if (tab === 'members' && document.getElementById('members-grid').children.length <= 1) loadMembers();
+            if (tab === 'achievements') loadBadgeShowcase();
+            if (tab === 'chat') loadChatHistory();
+        }
+        
+        function formatTimeAgo(dateStr) {
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000);
+            
+            if (diff < 60) return 'Just now';
+            if (diff < 3600) return Math.floor(diff / 60) + ' min ago';
+            if (diff < 86400) return Math.floor(diff / 3600) + ' hours ago';
+            if (diff < 604800) return Math.floor(diff / 86400) + ' days ago';
+            
+            return date.toLocaleDateString();
+        }
+        
+        function renderFeed(posts) {
+            const container = document.getElementById('feed-container');
+            
+            if (!posts || posts.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 50px;">
+                        <i class="fa fa-seedling fa-3x" style="color: #c8e6c9; margin-bottom: 20px;"></i>
+                        <h3 style="color: #888;">No posts yet</h3>
+                        <p style="color: #aaa;">Be the first to share your tree planting story!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = posts.map(post => {
+                const user = post.author || post.user || {};
+                const likeCount = post.like_count || 0;
+                const location = post.location || '';
+                const treeType = post.tree_type || '';
+                return `
+                    <div class="feed-card" id="post-${post.id}">
+                        <div class="feed-header">
+                            <img class="feed-avatar" src="${user.avatar_url || 'assets/images/default-avatar.png'}" alt="${user.full_name || 'User'}">
+                            <div class="feed-user-info" style="flex:1;">
+                                <h4>${user.full_name || user.username || 'Green Champion'}</h4>
+                                <span>${formatTimeAgo(post.created_at)}</span>
+                            </div>
+                            ${treeType ? `<span class="meta-chip tree-chip"><i class="fa fa-tree"></i> ${treeType}</span>` : ''}
+                        </div>
+                        <div class="feed-content">
+                            <p>${post.content}</p>
+                            ${location ? `<div class="meta-chip location-chip" style="margin-bottom:10px;"><i class="fa fa-map-marker-alt"></i> ${location}</div>` : ''}
+                            ${post.image_url ? `<img class="feed-image" src="${post.image_url}" alt="Post image" onclick="this.style.maxHeight=this.style.maxHeight?'':'none'" style="cursor:pointer;">` : ''}
+                        </div>
+                        <div class="feed-stats">
+                            <div class="feed-stat like-btn" onclick="toggleLike('${post.id}')" style="cursor: pointer;">
+                                <i class="fa fa-heart" id="heart-${post.id}"></i>
+                                <span id="like-count-${post.id}">${likeCount}</span>
+                            </div>
+                            <div class="feed-stat" onclick="toggleComments('${post.id}')" style="cursor: pointer;">
+                                <i class="fa fa-comment"></i>
+                                <span>Comment</span>
+                            </div>
+                            <div class="feed-stat" onclick="sharePost('${post.id}')" style="cursor: pointer;">
+                                <i class="fa fa-share"></i>
+                                <span>Share</span>
+                            </div>
+                        </div>
+                        <div class="comments-section" id="comments-${post.id}" style="display: none; padding: 15px; border-top: 1px solid #eee;">
+                            <div class="comments-list" id="comments-list-${post.id}"></div>
+                            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                <input type="text" id="comment-input-${post.id}" placeholder="Write a comment..." style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px;">
+                                <button onclick="addComment('${post.id}')" style="background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer;">
+                                    <i class="fa fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function sharePost(postId) {
+            const text = '🌱 Check out this post on Green Sprint!';
+            const url  = `${window.location.origin}/community.html#post-${postId}`;
+            if (navigator.share) {
+                navigator.share({ title: 'Green Sprint', text, url }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    // Visual feedback
+                    const el = document.querySelector(`#post-${postId} .share-btn`);
+                    if (el) { el.innerHTML = '<i class="fa fa-check"></i> Copied!'; setTimeout(() => { el.innerHTML = '<i class="fa fa-share"></i> Share'; }, 2000); }
+                }).catch(() => {
+                    window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
+                });
+            }
+        }
+        
+        // ── LIKES ──
+        let likedPosts = new Set();
+
+        async function toggleLike(postId) {
+            const user = AuthService.getUser();
+            if (!user) { alert('Please login to like posts'); return; }
+
+            const heartIcon   = document.getElementById(`heart-${postId}`);
+            const likeCountEl = document.getElementById(`like-count-${postId}`);
+            let count = parseInt(likeCountEl.textContent) || 0;
+            const sb  = GreenSprintDB.supabase();
+
+            if (likedPosts.has(postId)) {
+                // UNLIKE — optimistic UI first
+                likedPosts.delete(postId);
+                heartIcon.style.color = '';
+                likeCountEl.textContent = Math.max(0, count - 1);
+                try {
+                    if (sb) {
+                        await sb.from('post_likes').delete()
+                            .eq('post_id', postId).eq('user_id', user.id);
+                        await sb.from('community_posts')
+                            .update({ like_count: Math.max(0, count - 1) }).eq('id', postId);
+                    }
+                } catch (e) { console.warn('Unlike error:', e.message); }
+            } else {
+                // LIKE — optimistic UI first
+                likedPosts.add(postId);
+                heartIcon.style.color = '#e74c3c';
+                heartIcon.style.transform = 'scale(1.4)';
+                setTimeout(() => { if (heartIcon) heartIcon.style.transform = 'scale(1)'; }, 300);
+                likeCountEl.textContent = count + 1;
+                try {
+                    if (sb) {
+                        await sb.from('post_likes').insert([{ post_id: postId, user_id: user.id }]);
+                        await sb.from('community_posts')
+                            .update({ like_count: count + 1 }).eq('id', postId);
+                    }
+                } catch (e) {
+                    if (e.code !== '23505') console.warn('Like error:', e.message);
+                }
+            }
+        }
+
+        // ── COMMENTS ──
+        function toggleComments(postId) {
+            const section = document.getElementById(`comments-${postId}`);
+            const isHidden = section.style.display === 'none' || !section.style.display;
+            section.style.display = isHidden ? 'block' : 'none';
+            if (isHidden) loadComments(postId);
+        }
+
+        async function loadComments(postId) {
+            const list = document.getElementById(`comments-list-${postId}`);
+            list.innerHTML = '<p style="color:#aaa;text-align:center;padding:8px;font-size:13px;">Loading...</p>';
+            try {
+                const sb = GreenSprintDB.supabase();
+                if (!sb) throw new Error('No Supabase');
+
+                const { data: comments, error } = await sb
+                    .from('post_comments')
+                    .select('id, content, created_at, user_id')
+                    .eq('post_id', postId)
+                    .order('created_at', { ascending: true })
+                    .limit(30);
+                if (error) throw error;
+
+                if (!comments || comments.length === 0) {
+                    list.innerHTML = '<p style="color:#aaa;text-align:center;padding:10px;font-size:13px;">No comments yet. Be the first!</p>';
+                    return;
+                }
+
+                const userIds = [...new Set(comments.map(c => c.user_id).filter(Boolean))];
+                let pm = {};
+                try {
+                    const { data: profiles } = await sb.from('user_profiles')
+                        .select('id, full_name, username, avatar_url').in('id', userIds);
+                    (profiles || []).forEach(p => { pm[p.id] = p; });
+                } catch (_) {}
+
+                list.innerHTML = comments.map(c => {
+                    const a = pm[c.user_id] || {};
+                    const t = new Date(c.created_at).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+                    return `<div style="display:flex;gap:10px;margin-bottom:10px;padding:10px;background:#f9f9f9;border-radius:10px;align-items:flex-start;">
+                        <img src="${a.avatar_url || 'assets/images/default-avatar.png'}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0;" onerror="this.src='assets/images/default-avatar.png'">
+                        <div style="flex:1;">
+                            <div style="display:flex;gap:8px;align-items:center;margin-bottom:3px;">
+                                <strong style="font-size:13px;color:#2d5a27;">${a.full_name || a.username || 'Member'}</strong>
+                                <span style="font-size:11px;color:#bbb;">${t}</span>
+                            </div>
+                            <p style="margin:0;font-size:13px;color:#444;">${c.content}</p>
+                        </div>
+                    </div>`;
+                }).join('');
+            } catch (err) {
+                list.innerHTML = `<p style="color:#e74c3c;text-align:center;padding:10px;font-size:13px;">Could not load comments: ${err.message}</p>`;
+            }
+        }
+
+        async function addComment(postId) {
+            const user = AuthService.getUser();
+            if (!user) { alert('Please login to comment'); return; }
+
+            const input   = document.getElementById(`comment-input-${postId}`);
+            const content = input.value.trim();
+            if (!content) return;
+
+            const profile = AuthService.getProfile();
+            input.disabled = true;
+
+            // Optimistic bubble
+            const list = document.getElementById(`comments-list-${postId}`);
+            const p = list.querySelector('p');
+            if (p) p.remove();
+            const temp = document.createElement('div');
+            temp.style.cssText = 'display:flex;gap:10px;margin-bottom:10px;padding:10px;background:#f0fff4;border-radius:10px;align-items:flex-start;';
+            temp.innerHTML = `<img src="${profile?.avatar_url || 'assets/images/default-avatar.png'}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+                <div><strong style="font-size:13px;color:#2d5a27;">You</strong><p style="margin:3px 0 0;font-size:13px;color:#444;">${content}</p></div>`;
+            list.appendChild(temp);
+            input.value = '';
+
+            try {
+                const sb = GreenSprintDB.supabase();
+                if (sb) {
+                    const { error } = await sb.from('post_comments')
+                        .insert([{ post_id: postId, user_id: user.id, content }]);
+                    if (error) throw error;
+                }
+            } catch (err) {
+                temp.remove();
+                console.warn('Comment error:', err.message);
+                alert('Could not save comment. Please try again.');
+            } finally {
+                input.disabled = false;
+                input.focus();
+            }
+        }
+        
+        function getEcoLevel(pts) {
+            if (pts >= 5000) return { n: 10, t: 'Planet Guardian' };
+            if (pts >= 2000) return { n: 8,  t: 'Forest Champion' };
+            if (pts >= 1000) return { n: 6,  t: 'Eco Warrior'     };
+            if (pts >= 500)  return { n: 4,  t: 'Tree Hugger'     };
+            if (pts >= 200)  return { n: 2,  t: 'Sapling Scout'   };
+            return { n: 1, t: 'Seedling' };
+        }
+
+        function renderMembers(members) {
+            const grid = document.getElementById('members-grid');
+            grid.innerHTML = members.map(member => {
+                const pts = member.total_points || 0;
+                const lvl = getEcoLevel(pts);
+                const badges = member.badges || [];
+                const badgeEmojis = { seedling: '🌱', sapling: '🌿', tree_hugger: '🌳', forest_guardian: '🏕️', eco_warrior: '⚔️', nature_champion: '🏅' };
+                const co2 = Math.round((member.trees_planted||0) * 22);
+
+                return `
+                    <div class="member-card">
+                        <div class="member-level-pill">Lv.${lvl.n} ${lvl.t}</div>
+                        <div class="member-avatar-wrap">
+                            <img class="member-avatar" src="${member.avatar_url || 'assets/images/default-avatar.png'}" alt="${member.full_name||'User'}">
+                            <span class="member-online-dot"></span>
+                        </div>
+                        <div class="member-name">${member.full_name || 'Anonymous'}</div>
+                        <div class="member-username">@${member.username}</div>
+                        ${member.location ? `<div class="member-location">📍 ${member.location}</div>` : ''}
+                        ${member.bio ? `<div class="member-bio">${member.bio.substring(0,70)}${member.bio.length>70?'...':''}</div>` : ''}
+                        <div class="member-stats">
+                            <div class="member-stat">
+                                <div class="value">${member.trees_planted||0}</div><div class="label">🌳 Trees</div>
+                            </div>
+                            <div class="member-stat">
+                                <div class="value">${co2}</div><div class="label">🌱 CO₂ kg</div>
+                            </div>
+                            <div class="member-stat">
+                                <div class="value">${pts.toLocaleString()}</div><div class="label">⭐ Pts</div>
+                            </div>
+                        </div>
+                        <div class="member-badges">
+                            ${badges.slice(0,4).map(b => `<span title="${b}">${badgeEmojis[b]||'🏆'}</span>`).join('') || '<span style="color:#ddd;font-size:0.8rem;">No badges yet</span>'}
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="viewProfile('${member.id}')" style="margin-top:6px;width:100%;">
+                            <i class="fa fa-user"></i> View Profile
+                        </button>
+                    </div>`;
+            }).join('');
+        }
+        
+        // ── BADGE SHOWCASE ──
+        const ALL_BADGES = [
+            { id: 'seedling',        emoji: '🌱', name: 'Seedling',           desc: 'Plant your first tree',          req: 1  },
+            { id: 'sapling',         emoji: '🌿', name: 'Sapling Scout',       desc: 'Plant 5 trees',                  req: 5  },
+            { id: 'tree_hugger',     emoji: '🌳', name: 'Tree Hugger',         desc: 'Plant 10 trees',                 req: 10 },
+            { id: 'forest_guardian', emoji: '🏕️', name: 'Forest Guardian',     desc: 'Plant 25 trees',                 req: 25 },
+            { id: 'eco_warrior',     emoji: '⚔️',  name: 'Eco Warrior',        desc: 'Earn 500+ points',               req: null },
+            { id: 'nature_champion', emoji: '🏅', name: 'Nature Champion',     desc: 'Join 3+ campaigns',              req: null },
+            { id: 'earth_protector', emoji: '🌍', name: 'Earth Protector',     desc: 'Save 500 kg CO₂',               req: null },
+            { id: 'climate_hero',    emoji: '🦸', name: 'Climate Hero',        desc: 'Reach 1000+ points',             req: null },
+            { id: 'ambassador',      emoji: '💠', name: 'Green Ambassador',    desc: 'Share 5 posts in community',     req: null },
+            { id: 'campaign_leader', emoji: '📻', name: 'Campaign Leader',     desc: 'Create your first campaign',     req: null },
+            { id: 'century',         emoji: '💥', name: 'Century Planter',     desc: 'Plant 100 trees',                req: 100 },
+            { id: 'legend',          emoji: '👑', name: 'Green Legend',        desc: 'Reach level 10 eco rank',        req: null },
+        ];
+
+        function renderBadgeShowcase(userBadges) {
+            const container = document.getElementById('achievements-container');
+            const unlockedSet = new Set(userBadges || []);
+
+            container.innerHTML = `<div class="badge-grid">` +
+            ALL_BADGES.map(b => {
+                const unlocked = unlockedSet.has(b.id);
+                return `
+                    <div class="badge-item ${unlocked ? 'unlocked' : 'locked'}" title="${b.desc}">
+                        ${unlocked
+                            ? '<span class="badge-unlocked-tag">Earned ✔</span>'
+                            : '<span class="badge-locked-overlay">🔒</span>'}
+                        <div class="badge-emoji">${b.emoji}</div>
+                        <div class="badge-name">${b.name}</div>
+                        <div class="badge-desc">${b.desc}</div>
+                        ${b.req ? `<div class="badge-earners">${unlocked ? '✅ Unlocked' : '🎯 ' + b.req + ' trees needed'}</div>` : ''}
+                    </div>`;
+            }).join('') + '</div>';
+        }
+        
+        let selectedImages = [];
+        
+        function toggleField(id) {
+            const el = document.getElementById(id);
+            el.style.display = el.style.display === 'none' ? 'flex' : 'none';
+        }
+        
+        function hideField(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+        
+        async function getUserLocationText() {
+            const input = document.getElementById('post-location-text');
+            input.placeholder = 'Getting location...';
+            try {
+                const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, {timeout:8000}));
+                const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
+                const d = await resp.json();
+                input.value = d.address?.city || d.address?.town || d.address?.state || 'Your Location';
+                input.placeholder = 'Add location...';
+            } catch(e) {
+                input.placeholder = 'Add location (e.g. Pune, Maharashtra)';
+            }
+        }
+        
+        // Handle image selection
+        document.addEventListener('DOMContentLoaded', () => {
+            const imageInput = document.getElementById('post-image');
+            const strip = document.getElementById('image-preview-strip');
+            if (imageInput) {
+                imageInput.addEventListener('change', function(e) {
+                    const files = Array.from(e.target.files);
+                    files.forEach(file => {
+                        if (selectedImages.length >= 4) return; // limit 4 images
+                        selectedImages.push(file);
+                        const reader = new FileReader();
+                        reader.onload = (ev) => {
+                            const idx = selectedImages.length - 1;
+                            const div = document.createElement('div');
+                            div.className = 'image-preview-item';
+                            div.dataset.idx = idx;
+                            div.innerHTML = `<img src="${ev.target.result}" alt="Preview"><button class="remove-img" onclick="removeImage(${idx})"><i class="fa fa-times"></i></button>`;
+                            strip.appendChild(div);
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                    // Reset input so same file can be re-selected
+                    imageInput.value = '';
+                });
+            }
+        });
+        
+        function removeImage(idx) {
+            selectedImages.splice(idx, 1);
+            // Re-render previews
+            const strip = document.getElementById('image-preview-strip');
+            strip.innerHTML = '';
+            selectedImages.forEach((file, i) => {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const div = document.createElement('div');
+                    div.className = 'image-preview-item';
+                    div.innerHTML = `<img src="${ev.target.result}" alt="Preview"><button class="remove-img" onclick="removeImage(${i})"><i class="fa fa-times"></i></button>`;
+                    strip.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        async function createPost() {
+            const content = document.getElementById('post-content').value.trim();
+            if (!content) {
+                alert('Please write something to share!');
+                return;
+            }
+            
+            try {
+                const user = AuthService.getUser();
+                if (!user) {
+                    alert('Please login to post');
+                    return;
+                }
+                
+                const location = document.getElementById('post-location-text')?.value?.trim() || null;
+                const treeType = document.getElementById('post-tree-type')?.value || null;
+                
+                // Upload images to Supabase 'community-posts' storage bucket
+                let imageUrl = null;
+                if (selectedImages.length > 0) {
+                    try {
+                        const sb = GreenSprintDB.supabase();
+                        const file = selectedImages[0];
+                        const ext = file.name.split('.').pop();
+                        const fileName = `posts/${user.id}/${Date.now()}.${ext}`;
+                        const { data: uploadData, error: uploadErr } = await sb.storage
+                            .from('community-posts')
+                            .upload(fileName, file, { upsert: true, contentType: file.type });
+                        if (uploadErr) throw uploadErr;
+                        const { data: urlData } = sb.storage
+                            .from('community-posts')
+                            .getPublicUrl(fileName);
+                        imageUrl = urlData?.publicUrl || null;
+                    } catch (e) {
+                        console.warn('Image upload failed, posting without image:', e.message);
+                    }
+                }
+                
+                // Create post in database
+                const postData = {
+                    user_id: user.id,
+                    content: content,
+                    ...(imageUrl && { image_url: imageUrl }),
+                    ...(location && { location: location }),
+                    ...(treeType && { tree_type: treeType })
+                };
+                
+                await GreenSprintDB.community.createPost(postData);
+                
+                // Clear form
+                document.getElementById('post-content').value = '';
+                selectedImages = [];
+                document.getElementById('image-preview-strip').innerHTML = '';
+                document.getElementById('post-image').value = '';
+                if (document.getElementById('post-location-text')) document.getElementById('post-location-text').value = '';
+                if (document.getElementById('post-tree-type')) document.getElementById('post-tree-type').value = '';
+                hideField('location-row');
+                hideField('tree-type-row');
+                
+                // Reload feed to show new post
+                loadFeed();
+            } catch (error) {
+                console.error('Error creating post:', error);
+                alert('Error creating post: ' + error.message);
+            }
+        }
+        
+        async function likePost(postId) {
+            try {
+                const user = AuthService.getUser();
+                if (!user) {
+                    alert('Please login to like posts');
+                    return;
+                }
+                
+                await GreenSprintDB.community.likePost(postId, user.id);
+                
+                // Reload feed to update like count
+                loadFeed();
+            } catch (error) {
+                console.log('Already liked or error:', error.message);
+            }
+        }
+        
+        function viewProfile(userId) {
+            window.location.href = `profile.html?user=${userId}`;
+        }
+        
+        async function loadFeed() {
+            const container = document.getElementById('feed-container');
+            
+            try {
+                const sb = GreenSprintDB.supabase();
+                let posts = [];
+
+                if (sb) {
+                    // Fetch community posts — exclude [CHAT] messages (they belong to chat tab)
+                    const { data, error } = await sb
+                        .from('community_posts')
+                        .select('id, content, image_url, location, tree_type, user_id, like_count, created_at')
+                        .not('content', 'ilike', '[CHAT]%')   // ← keep feed and chat 100% separate
+                        .order('created_at', { ascending: false })
+                        .limit(30);
+
+                    if (!error && data) {
+                        // Batch-load author profiles
+                        const userIds = [...new Set(data.map(p => p.user_id).filter(Boolean))];
+                        let profileMap = {};
+                        if (userIds.length) {
+                            try {
+                                const { data: profiles } = await sb
+                                    .from('user_profiles')
+                                    .select('id, full_name, username, avatar_url')
+                                    .in('id', userIds);
+                                (profiles || []).forEach(p => { profileMap[p.id] = p; });
+                            } catch (_) {}
+                        }
+                        posts = data.map(p => ({ ...p, author: profileMap[p.user_id] || null }));
+                    }
+                }
+
+                renderFeed(posts);
+            } catch (error) {
+                console.error('Error loading feed:', error);
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 50px; color: #888;">
+                        <i class="fa fa-newspaper fa-3x" style="color: #ddd; margin-bottom: 20px;"></i>
+                        <h3 style="color: #888;">Could not load posts</h3>
+                        <p style="color: #aaa;">Please refresh the page.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function getActivityMessage(activity) {
+            switch (activity.action_type) {
+                case 'tree_planted':
+                    return `🌳 Planted a new tree! Let's grow the forest together.`;
+                case 'campaign_created':
+                    return `📋 Started a new tree planting campaign. Join the movement!`;
+                case 'campaign_joined':
+                    return `🤝 Joined a tree planting campaign. Together we can make a difference!`;
+                case 'badge_earned':
+                    return `🏆 Earned a new achievement badge! Hard work pays off.`;
+                default:
+                    return `💚 Active in the Green Sprint community!`;
+            }
+        }
+        
+        async function loadMembers() {
+            const grid = document.getElementById('members-grid');
+            grid.innerHTML = '<div style="text-align: center; padding: 30px; grid-column: 1/-1;"><i class="fa fa-spinner fa-spin"></i> Loading members...</div>';
+            
+            try {
+                const members = await GreenSprintDB.users.getLeaderboard(50);
+                if (members && members.length > 0) {
+                    renderMembers(members);
+                } else {
+                    grid.innerHTML = '<div style="text-align: center; padding: 50px; grid-column: 1/-1;"><p>No members yet. Be the first to join!</p></div>';
+                }
+            } catch (error) {
+                console.error('Error loading members:', error);
+                grid.innerHTML = '<div style="text-align: center; padding: 50px; grid-column: 1/-1;"><p>Could not load members.</p></div>';
+            }
+        }
+        
+        // ── CHAT (chat_messages table — run migration SQL first) ──
+        let chatProfile = null;
+        let chatChannel  = null;
+        let chatLoaded   = false;
+
+        // Render one bubble
+        function appendChatMessage(msg, scroll = true) {
+            const panel = document.getElementById('chat-messages');
+            const isMe = msg.mine || (chatProfile && msg.user_id === chatProfile?.id);
+            const wrapper = document.createElement('div');
+            wrapper.className = 'chat-msg' + (isMe ? ' mine' : '');
+            wrapper.innerHTML = `
+                <img class="chat-msg-avatar"
+                     src="${msg.avatar || 'assets/images/default-avatar.png'}"
+                     alt="${msg.name || 'User'}"
+                     onerror="this.src='assets/images/default-avatar.png'">
+                <div>
+                    <div class="chat-name-time">${isMe ? 'You' : (msg.name || 'Member')} · ${msg.t || 'now'}</div>
+                    <div class="chat-bubble">${msg.text || ''}</div>
+                </div>`;
+            panel.appendChild(wrapper);
+            if (scroll) panel.scrollTop = panel.scrollHeight;
+        }
+
+        // Load history from chat_messages table
+        async function loadChatHistory() {
+            if (chatLoaded) return;
+            chatLoaded = true;
+
+            const panel = document.getElementById('chat-messages');
+            panel.innerHTML = '<div class="chat-system-msg">🌱 Welcome to the Green Sprint community chat!</div>';
+
+            try {
+                const sb = GreenSprintDB.supabase();
+                if (!sb) throw new Error('Supabase not ready');
+
+                // Try chat_messages table first (dedicated table)
+                const { data: messages, error } = await sb
+                    .from('chat_messages')
+                    .select('id, message, user_id, created_at')
+                    .eq('is_deleted', false)
+                    .order('created_at', { ascending: true })
+                    .limit(50);
+
+                if (error) {
+                    if (error.code === '42P01') {
+                        // Table doesn't exist yet
+                        panel.innerHTML += `
+                            <div class="chat-system-msg" style="color:#e67e22;margin-top:12px;">
+                                ⚠️ Chat table not set up yet. Run the <strong>chat_messages_migration.sql</strong> script in Supabase to enable persistent chat.
+                            </div>`;
+                    } else {
+                        throw error;
+                    }
+                    subscribeToChatRealtime();
+                    return;
+                }
+
+                if (messages && messages.length > 0) {
+                    const userIds = [...new Set(messages.map(m => m.user_id).filter(Boolean))];
+                    let profileMap = {};
+                    try {
+                        const { data: profiles } = await sb
+                            .from('user_profiles')
+                            .select('id, full_name, username, avatar_url')
+                            .in('id', userIds);
+                        (profiles || []).forEach(p => { profileMap[p.id] = p; });
+                    } catch (_) {}
+
+                    messages.forEach(m => {
+                        const author = profileMap[m.user_id] || {};
+                        const t = new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        appendChatMessage({
+                            user_id: m.user_id,
+                            name:    author.full_name || author.username || 'Member',
+                            avatar:  author.avatar_url,
+                            text:    m.message,
+                            t
+                        }, false);
+                    });
+                } else {
+                    panel.innerHTML += '<div class="chat-system-msg" style="margin-top:12px;">No messages yet — be the first! 🌳</div>';
+                }
+                panel.scrollTop = panel.scrollHeight;
+            } catch (err) {
+                console.warn('Chat load error:', err.message);
+                panel.innerHTML += '<div class="chat-system-msg">⚠️ Could not load chat history.</div>';
+            }
+
+            subscribeToChatRealtime();
+        }
+
+        // Real-time subscription on chat_messages
+        function subscribeToChatRealtime() {
+            if (chatChannel) return;
+            try {
+                const sb = GreenSprintDB.supabase();
+                if (!sb) return;
+                chatChannel = sb
+                    .channel('gs-chat-live')
+                    .on('postgres_changes', {
+                        event: 'INSERT',
+                        schema: 'public',
+                        table: 'chat_messages'
+                    }, async (payload) => {
+                        const row = payload.new;
+                        if (chatProfile && row.user_id === chatProfile.id) return; // skip own
+                        let author = {};
+                        try {
+                            const { data } = await sb
+                                .from('user_profiles')
+                                .select('id, full_name, username, avatar_url')
+                                .eq('id', row.user_id)
+                                .maybeSingle();
+                            author = data || {};
+                        } catch (_) {}
+                        const t = new Date(row.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        appendChatMessage({
+                            user_id: row.user_id,
+                            name:    author.full_name || author.username || 'Member',
+                            avatar:  author.avatar_url,
+                            text:    row.message,
+                            t
+                        });
+                    })
+                    .subscribe((status) => {
+                        const badge = document.getElementById('chat-online-count');
+                        if (badge) badge.textContent = status === 'SUBSCRIBED' ? '● Live' : '○ Connecting...';
+                    });
+            } catch (err) {
+                console.warn('Realtime subscribe failed:', err.message);
+            }
+        }
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const text  = input.value.trim();
+            if (!text) return;
+
+            input.value = '';
+            input.disabled = true;
+
+            const p   = chatProfile;
+            const now = new Date();
+            const t   = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            // Show optimistically
+            appendChatMessage({ user_id: p?.id, name: p?.full_name || p?.username || 'You', avatar: p?.avatar_url, text, mine: true, t });
+
+            // Save to Supabase chat_messages table
+            try {
+                const sb = GreenSprintDB.supabase();
+                if (sb && p?.id) {
+                    const { error } = await sb.from('chat_messages').insert([{
+                        user_id:    p.id,
+                        message:    text,
+                        created_at: now.toISOString()
+                    }]);
+                    if (error && error.code === '42P01') {
+                        console.warn('chat_messages table not found — run migration SQL');
+                    }
+                }
+            } catch (err) {
+                console.warn('Could not save message:', err.message);
+            } finally {
+                input.disabled = false;
+                input.focus();
+            }
+        }
+
+
+
+
+        async function loadBadgeShowcase() {
+            const container = document.getElementById('achievements-container');
+            container.innerHTML = '<div style="text-align:center;padding:30px;"><i class="fa fa-spinner fa-spin" style="color:#4a9c3f;"></i></div>';
+            try {
+                const profile = AuthService.getProfile();
+                const userBadges = profile?.badges || [];
+                renderBadgeShowcase(userBadges);
+            } catch (err) {
+                console.error(err);
+                renderBadgeShowcase([]);
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            GreenSprintDB.init();
+            await AuthService.init();
+            if (!AuthService.isLoggedIn()) { window.location.href = 'login.html?redirect=community.html'; return; }
+
+            const profile = AuthService.getProfile();
+            chatProfile = profile;
+            if (profile) {
+                document.getElementById('sidebar-username').textContent = profile.full_name || profile.username;
+                document.getElementById('sidebar-avatar').src = profile.avatar_url || 'assets/images/default-avatar.png';
+                const postAvatar = document.getElementById('current-user-avatar');
+                if (postAvatar) postAvatar.src = profile.avatar_url || 'assets/images/default-avatar.png';
+            }
+
+            // Check if a specific tab was requested (e.g. from dashboard badge link)
+            const requestedTab = localStorage.getItem('openTab');
+            if (requestedTab) {
+                localStorage.removeItem('openTab');
+                switchTab(requestedTab);
+            } else {
+                loadFeed();
+            }
+        });
+
+    </script>
+</body>
+</html>

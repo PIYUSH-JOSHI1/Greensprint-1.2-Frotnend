@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard | Green Sprint</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/fontawesome.css">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <style>
+        /* ── COSMIC HERO ── */
+        .lb-hero {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            border-radius: 24px;
+            padding: 52px 40px 40px;
+            margin-bottom: 28px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .lb-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at top, rgba(74,156,63,0.18) 0%, transparent 65%);
+        }
+        .lb-hero-stars {
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.7) 0%, transparent 100%),
+                radial-gradient(1px 1px at 60% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+                radial-gradient(1px 1px at 80% 55%, rgba(255,255,255,0.6) 0%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 40% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
+                radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.5) 0%, transparent 100%),
+                radial-gradient(1px 1px at 90% 85%, rgba(255,255,255,0.3) 0%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 55% 40%, rgba(255,255,255,0.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 30% 55%, rgba(255,255,255,0.4) 0%, transparent 100%);
+        }
+        .lb-hero h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            position: relative;
+            letter-spacing: -0.5px;
+        }
+        .lb-hero p { position: relative; opacity: 0.75; font-size: 1rem; margin: 0; }
+
+        /* ── YOUR POSITION CARD ── */
+        .your-pos-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border-radius: 18px;
+            padding: 22px 28px;
+            color: white;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 18px;
+            border: 1px solid rgba(74,156,63,0.3);
+            box-shadow: 0 0 30px rgba(74,156,63,0.1);
+        }
+        .your-rank-badge {
+            font-size: 3.2rem;
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(135deg, #4a9c3f, #7ed56f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .your-rank-label { font-size: 0.78rem; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .your-pos-stats { display: flex; gap: 28px; flex-wrap: wrap; }
+        .your-stat { text-align: center; }
+        .your-stat .val { font-size: 1.4rem; font-weight: 700; color: #7ed56f; }
+        .your-stat .lbl { font-size: 0.72rem; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* ── SEARCH ── */
+        .lb-search-wrap {
+            position: relative;
+            max-width: 380px;
+            margin: 0 auto 24px;
+        }
+        .lb-search-wrap input {
+            width: 100%;
+            padding: 12px 44px 12px 18px;
+            border: 2px solid #e8f5e9;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            background: white;
+        }
+        .lb-search-wrap input:focus { border-color: #4a9c3f; box-shadow: 0 0 0 3px rgba(74,156,63,0.12); }
+        .lb-search-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: #aaa; pointer-events: none; }
+
+        /* ── TABS ── */
+        .lb-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .lb-tab {
+            padding: 10px 22px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.88rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.25s;
+            color: #555;
+        }
+        .lb-tab:hover { border-color: #4a9c3f; color: #4a9c3f; }
+        .lb-tab.active { border-color: #4a9c3f; background: #4a9c3f; color: white; box-shadow: 0 4px 14px rgba(74,156,63,0.3); }
+
+        /* ── PODIUM ── */
+        .podium-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 16px;
+            margin: 10px 0 36px;
+            flex-wrap: wrap;
+        }
+        .podium-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px 20px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 176px;
+            position: relative;
+            overflow: hidden;
+        }
+        .podium-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+        }
+        .podium-card.p1::before { background: linear-gradient(90deg, #f7c948, #e8a000); }
+        .podium-card.p2::before { background: linear-gradient(90deg, #b0b8c8, #8a94a6); }
+        .podium-card.p3::before { background: linear-gradient(90deg, #cd7f32, #a05a1e); }
+        .podium-card.p1 {
+            transform: scale(1.1);
+            box-shadow: 0 16px 48px rgba(247,201,72,0.18), 0 8px 24px rgba(0,0,0,0.12);
+            background: linear-gradient(160deg, #fff9e6, #fff);
+        }
+        .podium-card:hover { transform: translateY(-8px) scale(1.01); }
+        .podium-card.p1:hover { transform: scale(1.12) translateY(-8px); }
+        .podium-medal {
+            font-size: 2.2rem;
+            margin-bottom: 6px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        .podium-avatar {
+            width: 76px; height: 76px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 10px;
+            border: 4px solid white;
+        }
+        .p1 .podium-avatar {
+            width: 92px; height: 92px;
+            border: 5px solid #f7c948;
+            box-shadow: 0 0 0 3px rgba(247,201,72,0.3);
+        }
+        .p2 .podium-avatar { border-color: #c8cfe0; }
+        .p3 .podium-avatar { border-color: #cd7f32; }
+        .podium-name { font-weight: 700; font-size: 1rem; color: #1a1a1a; margin-bottom: 4px; }
+        .podium-trees { font-size: 0.82rem; color: #666; margin-bottom: 6px; }
+        .podium-pts {
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+        .p1 .podium-pts { color: #c68a00; }
+        .p2 .podium-pts { color: #6b7280; }
+        .p3 .podium-pts { color: #92400e; }
+        .fire-badge {
+            position: absolute;
+            top: 10px; right: 10px;
+            font-size: 1.2rem;
+            animation: flicker 1.4s ease-in-out infinite alternate;
+        }
+        @keyframes flicker {
+            from { opacity: 0.7; transform: scale(1); }
+            to   { opacity: 1;   transform: scale(1.15); }
+        }
+
+        /* ── TABLE ── */
+        .lb-table {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.07);
+        }
+        .lb-row {
+            display: flex;
+            align-items: center;
+            padding: 16px 22px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+            gap: 12px;
+        }
+        .lb-row:last-child { border-bottom: none; }
+        .lb-row:hover { background: #f8fffe; }
+        .lb-row.is-you {
+            background: linear-gradient(90deg, rgba(74,156,63,0.06), transparent);
+            border-left: 3px solid #4a9c3f;
+        }
+        .lb-row.lb-header {
+            background: #f8f9fa;
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #666;
+            border-bottom: 2px solid #eee;
+        }
+        /* rank column */
+        .lb-rank { width: 48px; font-size: 1.1rem; font-weight: 700; color: #aaa; flex-shrink: 0; text-align: center; }
+        .lb-rank.gold   { color: #c68a00; font-size: 1.5rem; }
+        .lb-rank.silver { color: #8a94a6; font-size: 1.4rem; }
+        .lb-rank.bronze { color: #92400e; font-size: 1.3rem; }
+        /* progress bar inside row */
+        .lb-progress-bg{ flex:1; height:6px; background:#eee; border-radius:3px; }
+        .lb-progress-fill{ height:100%; border-radius:3px; background:linear-gradient(90deg,#4a9c3f,#7ed56f); transition:width 0.8s ease; }
+        /* user col */
+        .lb-user { flex: 1; display: flex; align-items: center; gap: 12px; min-width: 0; }
+        .lb-avatar { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+        .lb-uname { font-weight: 600; font-size: 0.95rem; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lb-uhandle { font-size: 0.78rem; color: #aaa; }
+        .you-tag { background: #4a9c3f; color: white; font-size: 0.65rem; padding: 1px 7px; border-radius: 8px; font-weight: 700; margin-left: 6px; vertical-align: middle; }
+        /* stat cols */
+        .lb-stat { width: 76px; text-align: center; flex-shrink: 0; }
+        .lb-stat .sv { font-size: 1.05rem; font-weight: 700; color: #2d5a27; }
+        .lb-stat .sl { font-size: 0.68rem; color: #bbb; text-transform: uppercase; }
+        /* points col */
+        .lb-pts { width: 100px; text-align: right; flex-shrink: 0; }
+        .lb-pts .pv { font-size: 1.15rem; font-weight: 800; color: #4a9c3f; }
+        .lb-pts .trend { font-size: 0.7rem; color: #aaa; }
+        /* streak */
+        .streak-pill {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: linear-gradient(135deg, #ff6b35, #f7c948);
+            color: white; font-size: 0.7rem; font-weight: 700;
+            padding: 2px 8px; border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .lb-hero { padding: 32px 20px; }
+            .lb-hero h1 { font-size: 1.8rem; }
+            .podium-wrap { gap: 10px; }
+            .podium-card { width: 140px; }
+            .podium-card.p1 { transform: none; }
+            .lb-row { flex-wrap: wrap; padding: 12px 14px; }
+            .lb-stat { width: 58px; }
+            .lb-pts { width: 72px; }
+            .your-pos-card { flex-direction: column; }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
+    <div class="dashboard-container">
+        <aside class="dashboard-sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <img src="assets/images/green spirt (1).png" alt="Green Sprint">
+                <h2>Green Sprint</h2>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="dashboard.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+                <li><a href="tree-tracker.html"><i class="fa fa-qrcode"></i><span>Plant Tree</span></a></li>
+                <li><a href="my-trees.html"><i class="fa fa-tree"></i><span>My Trees</span></a></li>
+                <li><a href="campaigns.html"><i class="fa fa-bullhorn"></i><span>Campaigns</span></a></li>
+                <li><a href="leaderboard.html" class="active"><i class="fa fa-trophy"></i><span>Leaderboard</span></a></li>
+                <li><a href="analytics.html"><i class="fa fa-chart-line"></i><span>Analytics</span></a></li>
+                <li><a href="community.html"><i class="fa fa-users"></i><span>Community</span></a></li>
+                <li><a href="profile.html"><i class="fa fa-user"></i><span>Profile</span></a></li>
+                <li><a href="#" onclick="logout()"><i class="fa fa-sign-out-alt"></i><span>Logout</span></a></li>
+            </ul>
+            <div class="sidebar-user">
+                <img src="assets/images/default-avatar.png" alt="User" id="sidebar-avatar">
+                <div class="sidebar-user-info">
+                    <h4 id="sidebar-username">User</h4>
+                    <span>Member</span>
+                </div>
+            </div>
+        </aside>
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <main class="dashboard-main">
+            <!-- Cosmic Hero -->
+            <div class="lb-hero">
+                <div class="lb-hero-stars"></div>
+                <h1>🏆 Leaderboard</h1>
+                <p>Compete with eco-warriors. Rise through the ranks. Save the planet. 🌍</p>
+            </div>
+
+            <!-- Your Position -->
+            <div class="your-pos-card" id="your-pos-card">
+                <div>
+                    <div class="your-rank-label">Your Rank</div>
+                    <div class="your-rank-badge">#<span id="your-rank">—</span></div>
+                </div>
+                <div class="your-pos-stats">
+                    <div class="your-stat"><div class="val" id="your-trees">0</div><div class="lbl">🌳 Trees</div></div>
+                    <div class="your-stat"><div class="val" id="your-points">0</div><div class="lbl">⭐ Points</div></div>
+                    <div class="your-stat"><div class="val" id="your-co2">0 kg</div><div class="lbl">🌱 CO₂ Saved</div></div>
+                    <div class="your-stat"><div class="val" id="your-level">1</div><div class="lbl">🎖️ Level</div></div>
+                </div>
+            </div>
+
+            <!-- Search -->
+            <div class="lb-search-wrap">
+                <input type="text" id="lb-search" placeholder="🔍 Search eco-warriors..." oninput="filterTable()">
+                <i class="fa fa-search lb-search-icon"></i>
+            </div>
+
+            <!-- Tabs -->
+            <div class="lb-tabs">
+                <button class="lb-tab active" data-type="all-time" onclick="switchTab(this,'all-time')">🏅 All Time</button>
+                <button class="lb-tab" data-type="this-month" onclick="switchTab(this,'this-month')">📅 This Month</button>
+                <button class="lb-tab" data-type="trees" onclick="switchTab(this,'trees')">🌳 By Trees</button>
+                <button class="lb-tab" data-type="co2" onclick="switchTab(this,'co2')">🌿 By CO₂</button>
+            </div>
+
+            <!-- Podium -->
+            <div class="podium-wrap" id="podium"></div>
+
+            <!-- Table -->
+            <div class="lb-table" id="lb-table">
+                <div class="lb-row">
+                    <div style="width:100%;text-align:center;padding:40px;">
+                        <i class="fa fa-spinner fa-spin fa-2x" style="color:#4a9c3f;"></i>
+                        <p style="margin-top:14px;color:#888;">Loading eco-warriors...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/supabase-client.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script>
+        let currentUserId = null;
+        let allUsers = [];
+        let displayedUsers = [];
+
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+        async function logout() { await AuthService.logout(); }
+
+        function switchTab(el, type) {
+            document.querySelectorAll('.lb-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            loadLeaderboard(type);
+        }
+
+        function filterTable() {
+            const q = document.getElementById('lb-search').value.toLowerCase();
+            const filtered = q
+                ? displayedUsers.filter(u => (u.full_name||'').toLowerCase().includes(q) || (u.username||'').toLowerCase().includes(q))
+                : displayedUsers;
+            renderTable(filtered);
+        }
+
+        // Points → eco level
+        function getLevel(pts) {
+            if (pts >= 5000) return { n: 10, t: 'Planet Guardian' };
+            if (pts >= 2000) return { n: 8,  t: 'Forest Champion' };
+            if (pts >= 1000) return { n: 6,  t: 'Eco Warrior'     };
+            if (pts >= 500)  return { n: 4,  t: 'Tree Hugger'     };
+            if (pts >= 200)  return { n: 2,  t: 'Sapling Scout'   };
+            return { n: 1, t: 'Seedling' };
+        }
+
+        function renderPodium(users) {
+            const top = users.slice(0, Math.min(3, users.length));
+            const medals = ['🥇', '🥈', '🥉'];
+            const classes = ['p1', 'p2', 'p3'];
+            // Reorder: 2nd, 1st, 3rd
+            const order = top.length >= 3 ? [1, 0, 2] : top.length === 2 ? [1, 0] : [0];
+            document.getElementById('podium').innerHTML = order.map(i => {
+                const u = top[i];
+                if (!u) return '';
+                const lvl = getLevel(u.total_points || 0);
+                const isFirst = i === 0;
+                return `
+                <div class="podium-card ${classes[i]}">
+                    ${isFirst ? '<div class="fire-badge">🔥</div>' : ''}
+                    <div class="podium-medal">${medals[i]}</div>
+                    <img class="podium-avatar" src="${u.avatar_url || 'assets/images/default-avatar.png'}" alt="${u.full_name||'User'}">
+                    <div class="podium-name">${u.full_name || u.username || 'User'}</div>
+                    <div class="podium-trees">🌳 ${u.trees_planted||0} trees · ${lvl.t}</div>
+                    <div class="podium-pts">⭐ ${(u.total_points||0).toLocaleString()}</div>
+                </div>`;
+            }).join('');
+        }
+
+        function renderTable(users) {
+            const tbl = document.getElementById('lb-table');
+            if (!users.length) {
+                tbl.innerHTML = '<div class="lb-row" style="justify-content:center;padding:40px;color:#888;">No eco-warriors found.</div>';
+                return;
+            }
+            // Max points for progress bar scale
+            const maxPts = users[0]?.total_points || 1;
+
+            tbl.innerHTML = `
+                <div class="lb-row lb-header">
+                    <div class="lb-rank">#</div>
+                    <div class="lb-user">User</div>
+                    <div class="lb-stat"><span class="sl">Trees</span></div>
+                    <div class="lb-stat"><span class="sl">CO₂ kg</span></div>
+                    <div class="lb-stat" style="display:flex;flex-direction:column;align-items:center;"><span class="sl">Progress</span></div>
+                    <div class="lb-pts"><span style="font-size:0.78rem;text-transform:uppercase;letter-spacing:.5px;color:#999;">Points</span></div>
+                </div>` +
+            users.map((u, idx) => {
+                const rank = idx + 1;
+                const isYou = u.id === currentUserId;
+                const pts = u.total_points || 0;
+                const trees = u.trees_planted || 0;
+                const co2 = Math.round(trees * 22);
+                const lvl = getLevel(pts);
+                const pct = Math.min(100, Math.round((pts / maxPts) * 100));
+                const rankCls = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
+                const rankIcon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+                const streak = trees >= 5 ? `<span class="streak-pill">🔥 ${trees}+</span>` : '';
+
+                return `
+                <div class="lb-row ${isYou ? 'is-you' : ''}" data-name="${(u.full_name||'').toLowerCase()} ${(u.username||'').toLowerCase()}">
+                    <div class="lb-rank ${rankCls}">${rankIcon}</div>
+                    <div class="lb-user">
+                        <img class="lb-avatar" src="${u.avatar_url || 'assets/images/default-avatar.png'}" alt="${u.full_name||''}">
+                        <div>
+                            <div class="lb-uname">
+                                ${u.full_name || u.username || 'User'}
+                                ${isYou ? '<span class="you-tag">YOU</span>' : ''}
+                            </div>
+                            <div class="lb-uhandle">@${u.username||'member'} · Lv.${lvl.n} ${lvl.t}</div>
+                        </div>
+                    </div>
+                    ${streak}
+                    <div class="lb-stat"><div class="sv">${trees}</div><div class="sl">Trees</div></div>
+                    <div class="lb-stat"><div class="sv">${co2}</div><div class="sl">CO₂</div></div>
+                    <div class="lb-stat" style="width:90px;">
+                        <div class="lb-progress-bg"><div class="lb-progress-fill" style="width:${pct}%"></div></div>
+                    </div>
+                    <div class="lb-pts"><div class="pv">⭐ ${pts.toLocaleString()}</div></div>
+                </div>`;
+            }).join('');
+        }
+
+        function updateYourCard(users) {
+            const idx = users.findIndex(u => u.id === currentUserId);
+            if (idx === -1) return;
+            const u = users[idx];
+            const lvl = getLevel(u.total_points || 0);
+            document.getElementById('your-rank').textContent = idx + 1;
+            document.getElementById('your-trees').textContent = u.trees_planted || 0;
+            document.getElementById('your-points').textContent = (u.total_points || 0).toLocaleString();
+            document.getElementById('your-co2').textContent = Math.round((u.trees_planted||0) * 22) + ' kg';
+            document.getElementById('your-level').textContent = lvl.n;
+        }
+
+        function sortUsers(users, type) {
+            const arr = [...users];
+            if (type === 'trees') return arr.sort((a,b) => (b.trees_planted||0) - (a.trees_planted||0));
+            if (type === 'co2')   return arr.sort((a,b) => (b.trees_planted||0) - (a.trees_planted||0));
+            return arr.sort((a,b) => (b.total_points||0) - (a.total_points||0));
+        }
+
+        async function loadLeaderboard(type = 'all-time') {
+            document.getElementById('podium').innerHTML = '<div style="width:100%;text-align:center;padding:20px;"><i class="fa fa-spinner fa-spin" style="color:#4a9c3f;"></i></div>';
+            try {
+                let users = await GreenSprintDB.users.getLeaderboard(100);
+                allUsers = users;
+                displayedUsers = sortUsers(users, type);
+                renderPodium(displayedUsers);
+                renderTable(displayedUsers);
+                updateYourCard(displayedUsers);
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            GreenSprintDB.init();
+            await AuthService.init();
+            if (!AuthService.isLoggedIn()) { window.location.href = 'login.html?redirect=leaderboard.html'; return; }
+            currentUserId = AuthService.getUser()?.id;
+            const profile = AuthService.getProfile();
+            if (profile) {
+                document.getElementById('sidebar-username').textContent = profile.full_name || profile.username;
+                document.getElementById('sidebar-avatar').src = profile.avatar_url || 'assets/images/default-avatar.png';
+            }
+            loadLeaderboard('all-time');
+        });
+    </script>
+</body>
+</html>
