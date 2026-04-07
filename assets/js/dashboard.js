@@ -1,1116 +1,902 @@
 /**
- * Green Sprint - Dashboard Styles
- * Modern dashboard UI components
+ * Green Sprint - Dashboard Module
+ * Main dashboard functionality and data visualization
  */
 
-/* ============================================
-   CSS Variables
-   ============================================ */
-:root {
-    --gs-primary: #2d5a27;
-    --gs-primary-light: #4a9c3f;
-    --gs-primary-dark: #1e3d1a;
-    --gs-secondary: #7bc96f;
-    --gs-accent: #f4a261;
-    --gs-success: #2ecc71;
-    --gs-warning: #f39c12;
-    --gs-danger: #e74c3c;
-    --gs-info: #3498db;
-    --gs-dark: #1a1a2e;
-    --gs-light: #f8f9fa;
-    --gs-gray: #6c757d;
-    --gs-white: #ffffff;
-    --gs-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --gs-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
-    --gs-radius: 12px;
-    --gs-radius-sm: 8px;
-    --gs-transition: all 0.3s ease;
-    /* Legacy alias used across pages */
-    --primary-color: #2d5a27;
-}
-
-/* ============================================
-   Dashboard Layout
-   ============================================ */
-.dashboard-container {
-    display: flex;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
-}
-
-.dashboard-sidebar {
-    width: 280px;
-    background: var(--gs-dark);
-    color: var(--gs-white);
-    padding: 20px;
-    position: fixed;
-    height: 100vh;
-    overflow-y: auto;
-    transition: var(--gs-transition);
-    z-index: 1000;
-}
-
-.dashboard-sidebar.collapsed {
-    width: 80px;
-}
-
-.dashboard-main {
-    flex: 1;
-    margin-left: 280px;
-    padding: 30px;
-    transition: var(--gs-transition);
-}
-
-.dashboard-sidebar.collapsed + .dashboard-main {
-    margin-left: 80px;
-}
-
-/* Sidebar Logo */
-.sidebar-logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 20px;
-}
-
-.sidebar-logo img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-}
-
-.sidebar-logo h2 {
-    font-size: 20px;
-    color: var(--gs-white);
-    margin: 0;
-}
-
-/* Sidebar Navigation */
-.sidebar-nav {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar-nav li {
-    margin-bottom: 5px;
-}
-
-.sidebar-nav a {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 15px;
-    color: rgba(255, 255, 255, 0.7);
-    border-radius: var(--gs-radius-sm);
-    transition: var(--gs-transition);
-    text-decoration: none;
-}
-
-.sidebar-nav a:hover,
-.sidebar-nav a.active {
-    background: var(--gs-primary);
-    color: var(--gs-white);
-}
-
-.sidebar-nav a i {
-    width: 20px;
-    text-align: center;
-    font-size: 18px;
-}
-
-/* Sidebar User Section */
-.sidebar-user {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: var(--gs-radius-sm);
-}
-
-.sidebar-user img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.sidebar-user-info h4 {
-    margin: 0;
-    font-size: 14px;
-    color: var(--gs-white);
-}
-
-.sidebar-user-info span {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
-}
-
-/* ============================================
-   Dashboard Header
-   ============================================ */
-.dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-.dashboard-title h1 {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--gs-dark);
-    margin: 0;
-}
-
-.dashboard-title p {
-    color: var(--gs-gray);
-    margin: 5px 0 0;
-}
-
-.header-actions {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-}
-
-/* ============================================
-   Stats Cards
-   ============================================ */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.stat-card {
-    background: var(--gs-white);
-    border-radius: var(--gs-radius);
-    padding: 25px;
-    box-shadow: var(--gs-shadow);
-    transition: var(--gs-transition);
-    position: relative;
-    overflow: hidden;
-}
-
-.stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--gs-shadow-lg);
-}
-
-.stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-    background: var(--gs-primary);
-}
-
-.stat-card.trees::before { background: var(--gs-primary); }
-.stat-card.co2::before { background: var(--gs-info); }
-.stat-card.water::before { background: var(--gs-secondary); }
-.stat-card.points::before { background: var(--gs-accent); }
-
-.stat-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 15px;
-}
-
-.stat-card-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-}
-
-.stat-card.trees .stat-card-icon {
-    background: rgba(45, 90, 39, 0.1);
-    color: var(--gs-primary);
-}
-
-.stat-card.co2 .stat-card-icon {
-    background: rgba(52, 152, 219, 0.1);
-    color: var(--gs-info);
-}
-
-.stat-card.water .stat-card-icon {
-    background: rgba(123, 201, 111, 0.1);
-    color: var(--gs-secondary);
-}
-
-.stat-card.points .stat-card-icon {
-    background: rgba(244, 162, 97, 0.1);
-    color: var(--gs-accent);
-}
-
-.stat-card-value {
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--gs-dark);
-    margin-bottom: 5px;
-}
-
-.stat-card-label {
-    color: var(--gs-gray);
-    font-size: 14px;
-}
-
-.stat-card-trend {
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 10px;
-}
-
-.stat-card-trend.up {
-    color: var(--gs-success);
-}
-
-.stat-card-trend.down {
-    color: var(--gs-danger);
-}
-
-/* ============================================
-   Dashboard Cards
-   ============================================ */
-.dashboard-card {
-    background: var(--gs-white);
-    border-radius: var(--gs-radius);
-    box-shadow: var(--gs-shadow);
-    margin-bottom: 25px;
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 25px;
-    border-bottom: 1px solid #eee;
-}
-
-.card-header h3 {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--gs-dark);
-    margin: 0;
-}
-
-.card-header-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.card-body {
-    padding: 25px;
-}
-
-/* ============================================
-   Activity Feed
-   ============================================ */
-.activity-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 15px 0;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.activity-item:last-child {
-    border-bottom: none;
-}
-
-.activity-icon {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background: rgba(45, 90, 39, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--gs-primary);
-    font-size: 18px;
-}
-
-.activity-content {
-    flex: 1;
-}
-
-.activity-content h4 {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--gs-dark);
-    margin: 0 0 3px;
-}
-
-.activity-content p {
-    font-size: 13px;
-    color: var(--gs-gray);
-    margin: 0;
-}
-
-.activity-date {
-    font-size: 12px;
-    color: #aaa;
-}
-
-.activity-points {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--gs-success);
-}
-
-/* ============================================
-   Campaign Cards
-   ============================================ */
-.campaign-card {
-    background: var(--gs-white);
-    border-radius: var(--gs-radius);
-    overflow: hidden;
-    box-shadow: var(--gs-shadow);
-    cursor: pointer;
-    transition: var(--gs-transition);
-}
-
-.campaign-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--gs-shadow-lg);
-}
-
-.campaign-card .campaign-image {
-    position: relative;
-    height: 180px;
-    overflow: hidden;
-}
-
-.campaign-card .campaign-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: var(--gs-transition);
-}
-
-.campaign-card:hover .campaign-image img {
-    transform: scale(1.05);
-}
-
-.campaign-status {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.campaign-status.active {
-    background: var(--gs-success);
-    color: white;
-}
-
-.campaign-status.completed {
-    background: var(--gs-info);
-    color: white;
-}
-
-.campaign-status.draft {
-    background: var(--gs-gray);
-    color: white;
-}
-
-.campaign-content {
-    padding: 20px;
-}
-
-.campaign-content h3 {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--gs-dark);
-    margin: 0 0 10px;
-}
-
-.campaign-organizer {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: var(--gs-gray);
-    margin-bottom: 10px;
-}
-
-.campaign-organizer img {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-}
-
-.campaign-description {
-    font-size: 14px;
-    color: var(--gs-gray);
-    margin-bottom: 15px;
-    line-height: 1.5;
-}
-
-.campaign-progress-container {
-    margin-bottom: 15px;
-}
-
-.progress-info {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    color: var(--gs-gray);
-    margin-bottom: 8px;
-}
-
-.progress-bar-container {
-    height: 8px;
-    background: #eee;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, var(--gs-primary), var(--gs-secondary));
-    border-radius: 4px;
-    transition: width 0.5s ease;
-}
-
-.campaign-meta {
-    display: flex;
-    gap: 15px;
-    font-size: 12px;
-    color: var(--gs-gray);
-}
-
-.campaign-meta span {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-/* Mini Campaign Card */
-.campaign-card.mini {
-    padding: 15px;
-    margin-bottom: 10px;
-}
-
-.campaign-card.mini .campaign-progress {
-    height: 4px;
-    background: #eee;
-    border-radius: 2px;
-    margin-bottom: 10px;
-}
-
-.campaign-card.mini .campaign-progress .progress-bar {
-    height: 100%;
-}
-
-.campaign-card.mini h4 {
-    font-size: 14px;
-    margin: 0 0 8px;
-}
-
-.campaign-card.mini .campaign-stats {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: var(--gs-gray);
-}
-
-/* ============================================
-   Tree Cards
-   ============================================ */
-.trees-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
-}
-
-.tree-card {
-    background: var(--gs-white);
-    border-radius: var(--gs-radius);
-    overflow: hidden;
-    box-shadow: var(--gs-shadow);
-    cursor: pointer;
-    transition: var(--gs-transition);
-}
-
-.tree-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--gs-shadow-lg);
-}
-
-.tree-card .tree-image {
-    position: relative;
-    height: 150px;
-}
-
-.tree-card .tree-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.tree-card .health-status {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 4px 10px;
-    border-radius: 15px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: capitalize;
-}
-
-.health-status.healthy {
-    background: var(--gs-success);
-    color: white;
-}
-
-.health-status.needs_care {
-    background: var(--gs-warning);
-    color: white;
-}
-
-.health-status.at_risk {
-    background: var(--gs-danger);
-    color: white;
-}
-
-.tree-card .tree-info {
-    padding: 15px;
-}
-
-.tree-card .tree-info h4 {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--gs-dark);
-    margin: 0 0 5px;
-}
-
-.tree-card .tree-info p {
-    font-size: 12px;
-    color: var(--gs-gray);
-    margin: 0 0 10px;
-}
-
-.tree-card .tree-impact {
-    display: flex;
-    gap: 15px;
-    font-size: 12px;
-    color: var(--gs-primary);
-}
-
-/* ============================================
-   Leaderboard
-   ============================================ */
-.leaderboard-item {
-    display: flex;
-    align-items: center;
-    padding: 15px 20px;
-    border-bottom: 1px solid #f0f0f0;
-    transition: var(--gs-transition);
-}
-
-.leaderboard-item:hover {
-    background: #f8f9fa;
-}
-
-.leaderboard-item.top-1 {
-    background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), transparent);
-}
-
-.leaderboard-item.top-2 {
-    background: linear-gradient(90deg, rgba(192, 192, 192, 0.1), transparent);
-}
-
-.leaderboard-item.top-3 {
-    background: linear-gradient(90deg, rgba(205, 127, 50, 0.1), transparent);
-}
-
-.leaderboard-item .rank {
-    width: 40px;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--gs-gray);
-    text-align: center;
-}
-
-.leaderboard-item.top-1 .rank,
-.leaderboard-item.top-2 .rank,
-.leaderboard-item.top-3 .rank {
-    font-size: 24px;
-}
-
-.leaderboard-item .user-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1;
-}
-
-.leaderboard-item .user-info img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.leaderboard-item .user-details h4 {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--gs-dark);
-    margin: 0;
-}
-
-.leaderboard-item .user-details span {
-    font-size: 13px;
-    color: var(--gs-gray);
-}
-
-.leaderboard-item .user-stats {
-    display: flex;
-    gap: 25px;
-}
-
-.leaderboard-item .stat {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 14px;
-    color: var(--gs-gray);
-}
-
-.leaderboard-item .stat.points {
-    color: var(--gs-accent);
-    font-weight: 600;
-}
-
-/* ============================================
-   Badges
-   ============================================ */
-.badges-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-
-.badge-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 15px;
-    background: #f8f9fa;
-    border-radius: var(--gs-radius-sm);
-    min-width: 80px;
-    transition: var(--gs-transition);
-}
-
-.badge-item:hover {
-    background: #eee;
-    transform: scale(1.05);
-}
-
-.badge-icon {
-    font-size: 30px;
-    margin-bottom: 8px;
-}
-
-.badge-name {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--gs-gray);
-    text-align: center;
-}
-
-.no-badges {
-    text-align: center;
-    padding: 20px;
-    color: var(--gs-gray);
-}
-
-/* ============================================
-   Buttons
-   ============================================ */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 24px;
-    border: none;
-    border-radius: var(--gs-radius-sm);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--gs-transition);
-    text-decoration: none;
-}
-
-.btn-primary {
-    background: var(--gs-primary);
-    color: white;
-}
-
-.btn-primary:hover {
-    background: var(--gs-primary-dark);
-}
-
-.btn-secondary {
-    background: var(--gs-light);
-    color: var(--gs-dark);
-}
-
-.btn-secondary:hover {
-    background: #e2e6ea;
-}
-
-.btn-outline {
-    background: transparent;
-    border: 2px solid var(--gs-primary);
-    color: var(--gs-primary);
-}
-
-.btn-outline:hover {
-    background: var(--gs-primary);
-    color: white;
-}
-
-.btn-icon {
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border-radius: 50%;
-}
-
-.btn-sm {
-    padding: 7px 14px;
-    font-size: 13px;
-    border-radius: 6px;
-}
-
-/* Community tab buttons override - ensure text is always visible */
-.community-tab.active {
-    background: #2d5a27 !important;
-    color: white !important;
-    border-color: #2d5a27 !important;
-}
-
-.btn-secondary {
-    background: #f8f9fa !important;
-    color: #1a1a2e !important;
-    border: 1px solid #dee2e6;
-}
-.btn-secondary:hover {
-    background: #e2e6ea !important;
-    color: #1a1a2e !important;
-}
-
-/* ============================================
-   Forms
-   ============================================ */
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--gs-dark);
-    margin-bottom: 8px;
-}
-
-.form-control {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid #e0e0e0;
-    border-radius: var(--gs-radius-sm);
-    font-size: 14px;
-    transition: var(--gs-transition);
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: var(--gs-primary);
-    box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.1);
-}
-
-.form-control::placeholder {
-    color: #aaa;
-}
-
-textarea.form-control {
-    min-height: 120px;
-    resize: vertical;
-}
-
-/* ============================================
-   Charts Container
-   ============================================ */
-.chart-container {
-    position: relative;
-    height: 300px;
-}
-
-.charts-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 25px;
-    margin-bottom: 25px;
-}
-
-/* ============================================
-   Empty States
-   ============================================ */
-.no-activity,
-.no-campaigns,
-.no-trees,
-.no-results {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--gs-gray);
-}
-
-.no-activity i,
-.no-campaigns i,
-.no-trees i,
-.no-results i {
-    font-size: 48px;
-    margin-bottom: 15px;
-    opacity: 0.5;
-}
-
-.no-activity p,
-.no-campaigns p,
-.no-trees p,
-.no-results p {
-    margin-bottom: 20px;
-}
-
-/* Clean Empty Chart State */
-.empty-chart-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    min-height: 280px;
-    padding: 30px;
-    text-align: center;
-}
-
-.empty-chart-state h4 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #444;
-    margin: 15px 0 8px 0;
-}
-
-.empty-chart-state p {
-    font-size: 0.85rem;
-    color: #888;
-    margin: 0 0 20px 0;
-}
-
-.empty-chart-state .empty-chart-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 24px;
-    background: linear-gradient(135deg, #4a9c3f 0%, #2d5a27 100%);
-    color: white;
-    border-radius: 25px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(74, 156, 63, 0.25);
-}
-
-.empty-chart-state .empty-chart-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(74, 156, 63, 0.35);
-    color: white;
-}
-
-/* Timeline Empty State */
-.empty-timeline {
-    margin-bottom: 5px;
-}
-
-/* Impact Preview Styles */
-.impact-preview {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
-.impact-ring {
-    position: relative;
-}
-
-.impact-stats-preview {
-    display: flex;
-    gap: 35px;
-    justify-content: center;
-}
-
-.impact-stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-}
-
-.impact-stat-item .stat-value {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #444;
-}
-
-.impact-stat-item .stat-label {
-    font-size: 0.7rem;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.impact-hint {
-    font-size: 0.8rem;
-    color: #999;
-    margin-top: 15px;
-}
-
-/* ============================================
-   Responsive Design
-   ============================================ */
-@media (max-width: 1200px) {
-    .dashboard-sidebar {
-        width: 80px;
+const DashboardModule = {
+    charts: {},
+    stats: {},
+
+    // Initialize dashboard
+    async init() {
+        if (!AuthService.isLoggedIn()) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        await this.loadUserStats();
+        await this.loadGlobalStats();
+        await this.loadRecentActivity();
+        await this.loadUserCampaigns();
+        await this.loadUserTrees();
+        this.initCharts();
+        this.initRealtime();
+    },
+
+    // Load user statistics
+    async loadUserStats() {
+        try {
+            const profile = AuthService.getProfile();
+            const userId = AuthService.getUser()?.id;
+            
+            // Get actual tree count from database
+            let treesPlanted = 0;
+            if (userId) {
+                try {
+                    const userTrees = await GreenSprintDB.trees.getByUser(userId);
+                    treesPlanted = userTrees?.length || 0;
+                } catch (e) {
+                    console.warn('Could not fetch trees:', e);
+                    // Fallback to profile data
+                    treesPlanted = profile?.trees_planted || profile?.total_trees_planted || 0;
+                }
+            }
+            
+            const totalPoints = profile?.total_points || 0;
+            
+            // Update UI
+            document.getElementById('user-name').textContent = profile?.full_name || profile?.username || 'User';
+            document.getElementById('user-avatar').src = profile?.avatar_url || 'assets/images/default-avatar.png';
+            document.getElementById('trees-planted').textContent = treesPlanted;
+            document.getElementById('total-points').textContent = this.formatNumber(totalPoints);
+            
+            // Calculate environmental impact based on actual tree count
+            const impact = this.calculateImpact(treesPlanted);
+            document.getElementById('co2-saved').textContent = this.formatNumber(impact.co2) + ' kg';
+            document.getElementById('water-saved').textContent = this.formatNumber(impact.water) + ' L';
+            document.getElementById('oxygen-produced').textContent = this.formatNumber(impact.oxygen) + ' kg';
+
+            // Update trend messages based on actual data
+            this.updateTrendMessages(treesPlanted, totalPoints, impact);
+
+            // Load and display badges
+            await this.loadUserBadges();
+
+        } catch (error) {
+            console.error('Failed to load user stats:', error);
+        }
+    },
+
+    // Update trend messages dynamically
+    updateTrendMessages(treesPlanted, totalPoints, impact) {
+        const treesTrend = document.getElementById('trees-trend');
+        const co2Trend = document.getElementById('co2-trend');
+        const waterTrend = document.getElementById('water-trend');
+        const pointsTrend = document.getElementById('points-trend');
+
+        if (treesPlanted === 0) {
+            // No trees planted yet - show encouraging messages
+            if (treesTrend) treesTrend.innerHTML = '<i class="fa fa-seedling"></i> <span>Plant your first tree!</span>';
+            if (co2Trend) co2Trend.innerHTML = '<i class="fa fa-info-circle"></i> <span>~22 kg per tree/year</span>';
+            if (waterTrend) waterTrend.innerHTML = '<i class="fa fa-info-circle"></i> <span>~378 L per tree/year</span>';
+        } else if (treesPlanted === 1) {
+            // First tree planted - celebrate!
+            if (treesTrend) treesTrend.innerHTML = '<i class="fa fa-check-circle"></i> <span>Great start! 🎉</span>';
+            if (co2Trend) co2Trend.innerHTML = '<i class="fa fa-leaf"></i> <span>Your first impact!</span>';
+            if (waterTrend) waterTrend.innerHTML = '<i class="fa fa-tint"></i> <span>Making a difference!</span>';
+        } else {
+            // Multiple trees - show progress
+            if (treesTrend) treesTrend.innerHTML = `<i class="fa fa-arrow-up"></i> <span>${treesPlanted} trees strong!</span>`;
+            if (co2Trend) co2Trend.innerHTML = `<i class="fa fa-leaf"></i> <span>${impact.co2} kg absorbed/year</span>`;
+            if (waterTrend) waterTrend.innerHTML = `<i class="fa fa-tint"></i> <span>${impact.water} L filtered/year</span>`;
+        }
+
+        // Points trend
+        if (pointsTrend) {
+            if (totalPoints === 0) {
+                pointsTrend.innerHTML = '<i class="fa fa-star"></i> <span>Earn points by planting!</span>';
+            } else if (totalPoints < 100) {
+                pointsTrend.innerHTML = '<i class="fa fa-fire"></i> <span>Good start!</span>';
+            } else if (totalPoints < 500) {
+                pointsTrend.innerHTML = '<i class="fa fa-fire"></i> <span>Growing fast!</span>';
+            } else {
+                pointsTrend.innerHTML = '<i class="fa fa-trophy"></i> <span>Eco Champion!</span>';
+            }
+        }
+    },
+
+    // Load global statistics
+    async loadGlobalStats() {
+        try {
+            const stats = await GreenSprintDB.analytics.getGlobalStats();
+            
+            document.getElementById('global-trees').textContent = this.formatNumber(stats.totalTrees);
+            document.getElementById('global-users').textContent = this.formatNumber(stats.totalUsers);
+            document.getElementById('global-co2').textContent = this.formatNumber(stats.totalCO2) + ' kg';
+            document.getElementById('active-campaigns').textContent = stats.activeCampaigns;
+
+            this.stats.global = stats;
+        } catch (error) {
+            console.error('Failed to load global stats:', error);
+        }
+    },
+
+    // Load user's badges from profile.badges JSON column
+    async loadUserBadges() {
+        const container = document.getElementById('user-badges');
+        if (!container) return;
+
+        try {
+            const userId = AuthService.getUser()?.id;
+            if (!userId) return;
+
+            // Fetch fresh profile from DB to get latest badges array
+            let badges = [];
+            try {
+                const sb = GreenSprintDB.supabase();
+                if (sb) {
+                    const { data } = await sb
+                        .from('user_profiles')
+                        .select('badges')
+                        .eq('id', userId)
+                        .maybeSingle();
+                    badges = data?.badges || [];
+                }
+            } catch (_) {
+                // Fallback to cached profile
+                badges = AuthService.getProfile()?.badges || [];
+            }
+
+            // Badge catalog (copy of community.html ALL_BADGES)
+            const BADGE_MAP = {
+                seedling:        { emoji: '🌱', name: 'Seedling' },
+                sapling:         { emoji: '🌿', name: 'Sapling Scout' },
+                tree_hugger:     { emoji: '🌳', name: 'Tree Hugger' },
+                forest_guardian: { emoji: '🏕️', name: 'Forest Guardian' },
+                eco_warrior:     { emoji: '⚔️',  name: 'Eco Warrior' },
+                nature_champion: { emoji: '🏅', name: 'Nature Champion' },
+                earth_protector: { emoji: '🌍', name: 'Earth Protector' },
+                climate_hero:    { emoji: '🦸', name: 'Climate Hero' },
+                ambassador:      { emoji: '💠', name: 'Green Ambassador' },
+                campaign_leader: { emoji: '📻', name: 'Campaign Leader' },
+                century:         { emoji: '💥', name: 'Century Planter' },
+                legend:          { emoji: '👑', name: 'Green Legend' },
+                // Legacy/other IDs from achievements table
+                first_tree:      { emoji: '🌱', name: 'First Tree' },
+                five_trees:      { emoji: '🌿', name: 'Grove Starter' },
+                ten_trees:       { emoji: '🌳', name: 'Forest Friend' },
+                twentyfive_trees:{ emoji: '🏆', name: 'Tree Champion' },
+                fifty_trees:     { emoji: '🦸', name: 'Eco Warrior' },
+                hundred_trees:   { emoji: '👑', name: 'Forest Guardian' },
+            };
+
+            if (!badges || badges.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center;padding:30px 10px;">
+                        <div style="font-size:2.5rem;margin-bottom:12px;">🌱</div>
+                        <p style="color:#888;font-size:14px;margin:0 0 12px;">No badges yet — plant your first tree to start earning!</p>
+                        <a href="tree-tracker.html" class="btn btn-primary" style="font-size:13px;padding:8px 20px;">
+                            <i class="fa fa-tree"></i> Plant a Tree
+                        </a>
+                    </div>`;
+                return;
+            }
+
+            // Render unlocked badges as rich cards
+            container.innerHTML = `
+                <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;">
+                    ${badges.map(id => {
+                        const b = BADGE_MAP[id] || { emoji: '🏆', name: id.replace(/_/g,' ') };
+                        return `
+                            <div title="${b.name}" style="
+                                display:flex;flex-direction:column;align-items:center;
+                                background:linear-gradient(135deg,#f0fff4,#e8f5e9);
+                                border:2px solid #a5d6a7;border-radius:14px;
+                                padding:14px 10px;min-width:80px;max-width:100px;
+                                text-align:center;cursor:default;
+                                box-shadow:0 2px 8px rgba(45,90,39,0.1);
+                                transition:transform 0.2s;
+                            " onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+                                <div style="font-size:1.9rem;margin-bottom:6px;">${b.emoji}</div>
+                                <div style="font-size:11px;font-weight:700;color:#2d5a27;line-height:1.2;">${b.name}</div>
+                                <div style="font-size:10px;color:#4a9c3f;margin-top:4px;">✔ Earned</div>
+                            </div>`;
+                    }).join('')}
+                </div>
+                <div style="margin-top:14px;font-size:13px;color:#666;">
+                    🏅 <strong>${badges.length}</strong> badge${badges.length !== 1 ? 's' : ''} earned
+                    &nbsp;·&nbsp;
+                    <a href="community.html" onclick="localStorage.setItem('openTab','achievements')" 
+                       style="color:#2d5a27;font-weight:600;">View all badges →</a>
+                </div>`;
+
+        } catch (error) {
+            console.error('Failed to load badges:', error);
+            const container2 = document.getElementById('user-badges');
+            if (container2) container2.innerHTML = '<p class="no-badges" style="color:#888;">Could not load badges.</p>';
+        }
+    },
+
+
+    // Load recent activity
+    async loadRecentActivity() {
+        try {
+            const trees = await GreenSprintDB.trees.getByUser(AuthService.getUser().id);
+            const recentTrees = trees.slice(0, 5);
+
+            const container = document.getElementById('recent-activity');
+            if (!container) return;
+
+            if (recentTrees.length === 0) {
+                container.innerHTML = `
+                    <div class="no-activity">
+                        <i class="fa fa-tree"></i>
+                        <p>No trees planted yet. Start your journey!</p>
+                        <a href="tree-tracker.html" class="btn btn-primary">Plant a Tree</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = recentTrees.map(tree => `
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fa fa-leaf"></i>
+                    </div>
+                    <div class="activity-content">
+                        <h4>${tree.species?.common_name || 'Tree'} planted</h4>
+                        <p>${tree.campaign?.campaign_name || 'Personal planting'}</p>
+                        <span class="activity-date">${this.formatDate(tree.created_at)}</span>
+                    </div>
+                    <div class="activity-points">+${CONFIG.POINTS.TREE_PLANTED} pts</div>
+                </div>
+            `).join('');
+
+        } catch (error) {
+            console.error('Failed to load recent activity:', error);
+        }
+    },
+
+    // Load user campaigns
+    async loadUserCampaigns() {
+        try {
+            const campaigns = await GreenSprintDB.campaigns.getUserCampaigns(
+                AuthService.getUser().id
+            );
+
+            const container = document.getElementById('my-campaigns');
+            if (!container) return;
+
+            if (campaigns.length === 0) {
+                container.innerHTML = `
+                    <div class="no-campaigns">
+                        <i class="fa fa-bullhorn"></i>
+                        <p>You haven't created any campaigns yet.</p>
+                        <a href="campaigns.html#create" class="btn btn-secondary">Create Campaign</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = campaigns.map(c => `
+                <div class="campaign-card mini" onclick="window.location.href='campaign-details.html?id=${c.id}'">
+                    <div class="campaign-progress">
+                        <div class="progress-bar" style="width: ${(c.trees_planted / c.target_trees * 100)}%"></div>
+                    </div>
+                    <h4>${c.campaign_name}</h4>
+                    <div class="campaign-stats">
+                        <span><i class="fa fa-tree"></i> ${c.trees_planted}/${c.target_trees}</span>
+                        <span class="status ${c.status}">${c.status}</span>
+                    </div>
+                </div>
+            `).join('');
+
+        } catch (error) {
+            console.error('Failed to load campaigns:', error);
+        }
+    },
+
+    // Load user trees
+    async loadUserTrees() {
+        try {
+            const trees = await GreenSprintDB.trees.getByUser(AuthService.getUser().id);
+
+            const container = document.getElementById('my-trees-list');
+            if (!container) return;
+
+            if (trees.length === 0) {
+                container.innerHTML = `
+                    <div class="no-trees">
+                        <i class="fa fa-seedling"></i>
+                        <p>Your tree collection is empty.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = trees.slice(0, 8).map(tree => `
+                <div class="tree-card" onclick="DashboardModule.showTreeDetails('${tree.id}')">
+                    <div class="tree-image">
+                        <img src="${tree.photo_url || 'assets/images/default-tree.jpg'}" alt="Tree">
+                        <span class="health-status ${tree.health_status}">${tree.health_status}</span>
+                    </div>
+                    <div class="tree-info">
+                        <h4>${tree.species?.common_name || 'Tree'}</h4>
+                        <p>Planted: ${this.formatDate(tree.planting_date)}</p>
+                        <div class="tree-impact">
+                            <span><i class="fa fa-cloud"></i> ${tree.co2_sequestered_kg || 0} kg CO₂</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+        } catch (error) {
+            console.error('Failed to load trees:', error);
+        }
+    },
+
+    // Initialize charts
+    initCharts() {
+        this.initTreesChart();
+        this.initImpactChart();
+        this.initSpeciesChart();
+    },
+
+    // Trees over time chart
+    async initTreesChart() {
+        const ctx = document.getElementById('trees-chart');
+        if (!ctx) return;
+
+        try {
+            const userId = AuthService.getUser()?.id;
+            const data = await GreenSprintDB.analytics.getTreesOverTime(30, userId);
+            
+            // Group by date
+            const dailyCount = {};
+            data.forEach(tree => {
+                const date = (tree.planting_date || tree.created_at).split('T')[0];
+                dailyCount[date] = (dailyCount[date] || 0) + 1;
+            });
+
+            const labels = Object.keys(dailyCount).sort();
+            const values = labels.map(d => dailyCount[d]);
+
+            // If no data, show clean empty state
+            if (labels.length === 0) {
+                const container = ctx.parentElement;
+                container.innerHTML = `
+                    <div class="empty-chart-state">
+                        <div class="empty-timeline">
+                            <svg width="200" height="80" viewBox="0 0 200 80">
+                                <line x1="20" y1="60" x2="180" y2="60" stroke="#e0e0e0" stroke-width="2"/>
+                                <circle cx="40" cy="60" r="4" fill="#e0e0e0"/>
+                                <circle cx="80" cy="60" r="4" fill="#e0e0e0"/>
+                                <circle cx="120" cy="60" r="4" fill="#e0e0e0"/>
+                                <circle cx="160" cy="60" r="4" fill="#e0e0e0"/>
+                                <path d="M100 20 L100 45" stroke="#4a9c3f" stroke-width="2" stroke-dasharray="4"/>
+                                <circle cx="100" cy="20" r="8" fill="#4a9c3f"/>
+                                <text x="100" y="24" text-anchor="middle" fill="white" font-size="10">🌱</text>
+                            </svg>
+                        </div>
+                        <h4>Your Timeline Awaits</h4>
+                        <p>Plant trees to see your progress here</p>
+                        <a href="tree-tracker.html" class="empty-chart-btn">
+                            <i class="fa fa-plus"></i> Plant a Tree
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            this.charts.trees = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels.map(d => this.formatDateShort(d)),
+                    datasets: [{
+                        label: 'Trees Planted',
+                        data: values,
+                        borderColor: '#2d5a27',
+                        backgroundColor: 'rgba(45, 90, 39, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+
+        } catch (error) {
+            console.error('Failed to init trees chart:', error);
+        }
+    },
+
+    // Environmental impact chart
+    async initImpactChart() {
+        const ctx = document.getElementById('impact-chart');
+        if (!ctx) return;
+
+        // Get actual tree count from database
+        const userId = AuthService.getUser()?.id;
+        let trees = 0;
+        
+        if (userId) {
+            try {
+                const userTrees = await GreenSprintDB.trees.getByUser(userId);
+                trees = userTrees?.length || 0;
+            } catch (e) {
+                const profile = AuthService.getProfile();
+                trees = profile?.trees_planted || profile?.total_trees_planted || 0;
+            }
+        }
+        
+        const impact = this.calculateImpact(trees);
+
+        // If no trees planted, show clean empty state
+        if (trees === 0) {
+            const container = ctx.parentElement;
+            container.innerHTML = `
+                <div class="empty-chart-state">
+                    <div class="impact-preview">
+                        <div class="impact-ring">
+                            <svg width="100" height="100" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="42" stroke="#e8e8e8" stroke-width="6" fill="none"/>
+                                <text x="50" y="45" text-anchor="middle" fill="#555" font-size="18" font-weight="700">0</text>
+                                <text x="50" y="62" text-anchor="middle" fill="#888" font-size="11">trees</text>
+                            </svg>
+                        </div>
+                        <div class="impact-stats-preview">
+                            <div class="impact-stat-item">
+                                <span class="stat-value">0 kg</span>
+                                <span class="stat-label">CO₂</span>
+                            </div>
+                            <div class="impact-stat-item">
+                                <span class="stat-value">0 L</span>
+                                <span class="stat-label">Water</span>
+                            </div>
+                            <div class="impact-stat-item">
+                                <span class="stat-value">0 kg</span>
+                                <span class="stat-label">O₂</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="impact-hint">Plant trees to track your environmental impact!</p>
+                </div>
+            `;
+            return;
+        }
+
+        this.charts.impact = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['CO₂ Absorbed', 'Water Filtered', 'Oxygen Produced'],
+                datasets: [{
+                    data: [impact.co2, impact.water / 10, impact.oxygen],
+                    backgroundColor: [
+                        '#2d5a27',
+                        '#4a9c3f',
+                        '#7bc96f'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+    },
+
+    // Species distribution chart
+    async initSpeciesChart() {
+        const ctx = document.getElementById('species-chart');
+        if (!ctx) return;
+
+        try {
+            const distribution = await GreenSprintDB.analytics.getSpeciesDistribution();
+            
+            const labels = Object.keys(distribution).slice(0, 5);
+            const values = labels.map(l => distribution[l]);
+
+            this.charts.species = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Trees by Species',
+                        data: values,
+                        backgroundColor: '#4a9c3f'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+
+        } catch (error) {
+            console.error('Failed to init species chart:', error);
+        }
+    },
+
+    // Initialize real-time updates
+    initRealtime() {
+        GreenSprintDB.realtime.subscribeToLeaderboard((payload) => {
+            console.log('Leaderboard updated:', payload);
+            this.loadGlobalStats();
+        });
+    },
+
+    // Calculate environmental impact
+    calculateImpact(treeCount) {
+        return {
+            co2: Math.round(treeCount * CONFIG.IMPACT.CO2_KG_PER_TREE),
+            water: Math.round(treeCount * CONFIG.IMPACT.WATER_LITERS_PER_TREE),
+            oxygen: Math.round(treeCount * CONFIG.IMPACT.OXYGEN_KG_PER_TREE),
+            pollutants: Math.round(treeCount * CONFIG.IMPACT.AIR_POLLUTANTS_G_PER_TREE)
+        };
+    },
+
+    // Show tree details modal
+    async showTreeDetails(treeId) {
+        // Open tree details page or modal
+        window.location.href = `tree-details.html?id=${treeId}`;
+    },
+
+    // Format number with commas
+    formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+
+    // Format date
+    formatDate(dateStr) {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    },
+
+    // Format date short
+    formatDateShort(dateStr) {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric'
+        });
     }
-    
-    .dashboard-sidebar .sidebar-logo h2,
-    .dashboard-sidebar .sidebar-nav span,
-    .dashboard-sidebar .sidebar-user-info {
-        display: none;
-    }
-    
-    .dashboard-main {
-        margin-left: 80px;
-    }
-}
+};
 
-@media (max-width: 768px) {
-    .dashboard-sidebar {
-        transform: translateX(-100%);
-        width: 280px;
-    }
-    
-    .dashboard-sidebar.open {
-        transform: translateX(0);
-    }
-    
-    .dashboard-sidebar.open .sidebar-logo h2,
-    .dashboard-sidebar.open .sidebar-nav span,
-    .dashboard-sidebar.open .sidebar-user-info {
-        display: block;
-    }
-    
-    .dashboard-main {
-        margin-left: 0;
-        padding: 15px;
-    }
-    
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .charts-row {
-        grid-template-columns: 1fr;
-    }
-    
-    .dashboard-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-}
+// Campaigns Module
+const CampaignsModule = {
+    campaigns: [],
+    filters: {
+        status: 'all',
+        objective: 'all'
+    },
 
-@media (max-width: 576px) {
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .trees-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .leaderboard-item .user-stats {
-        flex-direction: column;
-        gap: 5px;
-    }
-}
+    // Initialize campaigns page
+    async init() {
+        await this.loadCampaigns();
+        this.bindEvents();
+    },
 
-/* ============================================
-   Mobile Menu Toggle
-   ============================================ */
-.mobile-menu-toggle {
-    display: none;
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    z-index: 1001;
-    width: 45px;
-    height: 45px;
-    background: var(--gs-primary);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    font-size: 20px;
-    cursor: pointer;
-}
+    // Load campaigns
+    async loadCampaigns() {
+        try {
+            const filters = {};
+            if (this.filters.status !== 'all') filters.status = this.filters.status;
+            if (this.filters.objective !== 'all') filters.objective = this.filters.objective;
 
-@media (max-width: 768px) {
-    .mobile-menu-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+            this.campaigns = await GreenSprintDB.campaigns.getAll(filters);
+            this.renderCampaigns();
+        } catch (error) {
+            console.error('Failed to load campaigns:', error);
+        }
+    },
+
+    // Render campaigns
+    renderCampaigns() {
+        const container = document.getElementById('campaigns-grid');
+        if (!container) return;
+
+        if (this.campaigns.length === 0) {
+            container.innerHTML = `
+                <div class="no-results">
+                    <i class="fa fa-search"></i>
+                    <p>No campaigns found</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = this.campaigns.map(c => this.renderCampaignCard(c)).join('');
+    },
+
+    // Render single campaign card
+    renderCampaignCard(campaign) {
+        const progress = Math.round((campaign.trees_planted / campaign.target_trees) * 100);
+        
+        return `
+            <div class="campaign-card" onclick="window.location.href='campaign-details.html?id=${campaign.id}'">
+                <div class="campaign-image">
+                    <img src="${campaign.campaign_image_url || 'assets/images/default-campaign.jpg'}" alt="${campaign.campaign_name}">
+                    <span class="campaign-status ${campaign.status}">${campaign.status}</span>
+                </div>
+                <div class="campaign-content">
+                    <h3>${campaign.campaign_name}</h3>
+                    <p class="campaign-organizer">
+                        <img src="${campaign.organizer?.avatar_url || 'assets/images/default-avatar.png'}" alt="Organizer">
+                        ${campaign.organizer?.full_name || 'Anonymous'}
+                    </p>
+                    <p class="campaign-description">${campaign.description?.substring(0, 100)}...</p>
+                    <div class="campaign-progress-container">
+                        <div class="progress-info">
+                            <span>${campaign.trees_planted} / ${campaign.target_trees} trees</span>
+                            <span>${progress}%</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: ${progress}%"></div>
+                        </div>
+                    </div>
+                    <div class="campaign-meta">
+                        <span><i class="fa fa-calendar"></i> ${this.formatDate(campaign.start_date)}</span>
+                        <span><i class="fa fa-map-marker"></i> ${campaign.location?.address || 'Global'}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    // Bind events
+    bindEvents() {
+        // Filter buttons
+        document.querySelectorAll('[data-filter]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const type = e.target.dataset.filterType;
+                const value = e.target.dataset.filter;
+                this.setFilter(type, value);
+            });
+        });
+
+        // Search
+        const searchInput = document.getElementById('campaign-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                this.searchCampaigns(e.target.value);
+            });
+        }
+    },
+
+    // Set filter
+    setFilter(type, value) {
+        this.filters[type] = value;
+        this.loadCampaigns();
+
+        // Update active state
+        document.querySelectorAll(`[data-filter-type="${type}"]`).forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.filter === value) {
+                btn.classList.add('active');
+            }
+        });
+    },
+
+    // Search campaigns
+    searchCampaigns(query) {
+        if (query.length < 2) {
+            this.renderCampaigns();
+            return;
+        }
+
+        const filtered = this.campaigns.filter(c => 
+            c.campaign_name.toLowerCase().includes(query.toLowerCase()) ||
+            c.description?.toLowerCase().includes(query.toLowerCase())
+        );
+
+        const container = document.getElementById('campaigns-grid');
+        if (container) {
+            container.innerHTML = filtered.map(c => this.renderCampaignCard(c)).join('');
+        }
+    },
+
+    // Format date
+    formatDate(dateStr) {
+        if (!dateStr) return 'TBD';
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
-}
+};
 
-/* Overlay */
-.sidebar-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-}
+// Leaderboard Module
+const LeaderboardModule = {
+    async init() {
+        await this.loadLeaderboard();
+        this.initRealtime();
+    },
 
-.dashboard-sidebar.open ~ .sidebar-overlay {
-    display: block;
-}
+    async loadLeaderboard() {
+        try {
+            const leaders = await GreenSprintDB.users.getLeaderboard(50);
+            this.renderLeaderboard(leaders);
+        } catch (error) {
+            console.error('Failed to load leaderboard:', error);
+        }
+    },
+
+    renderLeaderboard(leaders) {
+        const container = document.getElementById('leaderboard-list');
+        if (!container) return;
+
+        container.innerHTML = leaders.map((user, index) => `
+            <div class="leaderboard-item ${index < 3 ? 'top-' + (index + 1) : ''}">
+                <div class="rank">
+                    ${index < 3 ? this.getRankIcon(index + 1) : index + 1}
+                </div>
+                <div class="user-info">
+                    <img src="${user.avatar_url || 'assets/images/default-avatar.png'}" alt="${user.username}">
+                    <div class="user-details">
+                        <h4>${user.full_name || user.username}</h4>
+                        <span>@${user.username}</span>
+                    </div>
+                </div>
+                <div class="user-stats">
+                    <div class="stat">
+                        <i class="fa fa-tree"></i>
+                        <span>${user.total_trees_planted}</span>
+                    </div>
+                    <div class="stat points">
+                        <i class="fa fa-star"></i>
+                        <span>${this.formatNumber(user.total_points)}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    },
+
+    getRankIcon(rank) {
+        const icons = {
+            1: '🥇',
+            2: '🥈',
+            3: '🥉'
+        };
+        return icons[rank] || rank;
+    },
+
+    initRealtime() {
+        GreenSprintDB.realtime.subscribeToLeaderboard(() => {
+            this.loadLeaderboard();
+        });
+    },
+
+    formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+};
+
+// Profile Module
+const ProfileModule = {
+    async init() {
+        if (!AuthService.isLoggedIn()) {
+            window.location.href = 'login.html';
+            return;
+        }
+        await this.loadProfile();
+        this.bindEvents();
+    },
+
+    async loadProfile() {
+        const profile = AuthService.getProfile();
+        if (!profile) return;
+
+        // Populate form fields
+        document.getElementById('profile-avatar-img').src = profile.avatar_url || 'assets/images/default-avatar.png';
+        document.getElementById('profile-fullname').value = profile.full_name || '';
+        document.getElementById('profile-username').value = profile.username || '';
+        document.getElementById('profile-email').value = profile.email || '';
+        document.getElementById('profile-bio').value = profile.bio || '';
+        document.getElementById('profile-location').value = profile.location || '';
+        document.getElementById('profile-phone').value = profile.phone || '';
+
+        // Stats
+        document.getElementById('profile-trees').textContent = profile.total_trees_planted || 0;
+        document.getElementById('profile-points').textContent = this.formatNumber(profile.total_points || 0);
+        document.getElementById('profile-joined').textContent = this.formatDate(profile.created_at);
+    },
+
+    bindEvents() {
+        // Avatar upload
+        const avatarInput = document.getElementById('avatar-upload');
+        if (avatarInput) {
+            avatarInput.addEventListener('change', (e) => this.uploadAvatar(e.target.files[0]));
+        }
+
+        // Profile form
+        const form = document.getElementById('profile-form');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.saveProfile();
+            });
+        }
+    },
+
+    async uploadAvatar(file) {
+        if (!file) return;
+
+        try {
+            const url = await GreenSprintDB.storage.uploadAvatar(AuthService.getUser().id, file);
+            await GreenSprintDB.users.updateProfile(AuthService.getUser().id, { avatar_url: url });
+            document.getElementById('profile-avatar-img').src = url;
+            await AuthService.loadProfile();
+            alert('Avatar updated successfully!');
+        } catch (error) {
+            console.error('Avatar upload failed:', error);
+            alert('Failed to upload avatar');
+        }
+    },
+
+    async saveProfile() {
+        try {
+            const updates = {
+                full_name: document.getElementById('profile-fullname').value,
+                bio: document.getElementById('profile-bio').value,
+                location: document.getElementById('profile-location').value,
+                phone: document.getElementById('profile-phone').value
+            };
+
+            await GreenSprintDB.users.updateProfile(AuthService.getUser().id, updates);
+            await AuthService.loadProfile();
+            alert('Profile updated successfully!');
+        } catch (error) {
+            console.error('Profile save failed:', error);
+            alert('Failed to save profile');
+        }
+    },
+
+    formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+
+    formatDate(dateStr) {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+    }
+};
+
+// Export modules
+window.DashboardModule = DashboardModule;
+window.CampaignsModule = CampaignsModule;
+window.LeaderboardModule = LeaderboardModule;
+window.ProfileModule = ProfileModule;
