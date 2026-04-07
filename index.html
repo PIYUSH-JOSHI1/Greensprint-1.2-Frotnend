@@ -12,7 +12,7 @@
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="icon" href="/scholar-1.0.0/assets/images/green spirt (1).png" type="image/x-icon">
+    <link rel="icon" href="assets/images/green spirt (1).png" type="image/x-icon">
 
 
 
@@ -93,8 +93,9 @@ https://templatemo.com/tm-586-scholar
                       <li class="scroll-to-section"><a href="#courses">About</a></li>
                       <li class="scroll-to-section"><a href="#showcase">Showcase</a></li>
                       <li class="scroll-to-section"><a href="#contact">Contact Us</a></li>
-                      <li class="scroll-to-section"><a href="login.html">Login</a></li>
-                      <li class="scroll-to-section"><a href="register.html" class="btn-register" style="background: #4a9c3f; color: white; padding: 8px 20px; border-radius: 25px;">Sign Up</a></li>
+                      <li class="scroll-to-section" id="nav-login-item"><a href="login.html">Login</a></li>
+                      <li class="scroll-to-section" id="nav-signup-item"><a href="register.html" class="btn-register" style="background: #4a9c3f; color: white; padding: 8px 20px; border-radius: 25px;">Sign Up</a></li>
+                      <li class="scroll-to-section" id="nav-dashboard-item" style="display: none;"><a href="dashboard.html" style="background: #7a6ad8; color: white; padding: 8px 20px; border-radius: 25px;">Dashboard</a></li>
                   </ul>   
                     <a class='menu-trigger'>
                         <span>Menu</span>
@@ -569,7 +570,15 @@ https://templatemo.com/tm-586-scholar
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') closeSmartReader();
     });
+  </script>
 
+  <!-- Auth Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/supabase-client.js"></script>
+  <script src="assets/js/auth.js"></script>
+
+  <script>
     // ============================================================
     // BACKEND API URL - Auto-detects dev vs production
     // ============================================================
@@ -578,8 +587,35 @@ https://templatemo.com/tm-586-scholar
         if (h === 'localhost' || h === '127.0.0.1' || h === '') {
             return 'http://localhost:5000';
         }
-        return 'https://greensprint-1-2-backend.onrender.com'; // ← Your Render URL
+        return 'https://green-sprint-api.onrender.com';
     })();
+
+    // ============================================================
+    // DYNAMIC AUTH BUTTONS
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', async () => {
+        if (window.AuthService) {
+            // Check session to update UI
+            setTimeout(async () => {
+                const session = await AuthService.checkSession();
+                if (session) {
+                    const l = document.getElementById('nav-login-item');
+                    const s = document.getElementById('nav-signup-item');
+                    const d = document.getElementById('nav-dashboard-item');
+                    if(l) l.style.display = 'none';
+                    if(s) s.style.display = 'none';
+                    if(d) d.style.display = 'block';
+
+                    // Update all buttons on page
+                    document.querySelectorAll('a[href="login.html"]').forEach(btn => {
+                        btn.href = 'dashboard.html';
+                        btn.innerHTML = btn.innerHTML.replace('Login to', 'Go to');
+                        btn.innerHTML = btn.innerHTML.replace('Login', 'Dashboard');
+                    });
+                }
+            }, 500);
+        }
+    });
     
     // ============================================================
     // CONTACT FORM SUBMISSION
@@ -588,44 +624,36 @@ https://templatemo.com/tm-586-scholar
         event.preventDefault();
         
         const btn = document.getElementById('contact-btn');
-        const status = document.getElementById('contact-status');
         const originalText = btn.textContent;
         
-        // Get form values
         const name = document.getElementById('contact-name').value.trim();
         const email = document.getElementById('contact-email').value.trim();
         const message = document.getElementById('contact-message').value.trim();
         
-        // Validate
         if (!name || !email || !message) {
             showStatus('Please fill in all fields', 'error');
             return;
         }
         
-        // Show loading
         btn.textContent = 'Sending...';
         btn.disabled = true;
         
         try {
             const response = await fetch(`${BACKEND_API_URL}/api/contact`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, email, message })
             });
             
             const data = await response.json();
-            
             if (data.success) {
-                showStatus('✅ Message sent successfully! Check your email for confirmation.', 'success');
+                showStatus('✅ Message sent successfully!', 'success');
                 document.getElementById('contact-form').reset();
             } else {
                 showStatus('❌ ' + (data.error || 'Failed to send message'), 'error');
             }
         } catch (error) {
-            console.error('Contact form error:', error);
-            showStatus('❌ Network error. Please try again later.', 'error');
+            showStatus('❌ Network error. Please try again.', 'error');
         } finally {
             btn.textContent = originalText;
             btn.disabled = false;
@@ -634,18 +662,15 @@ https://templatemo.com/tm-586-scholar
     
     function showStatus(message, type) {
         const status = document.getElementById('contact-status');
+        if (!status) return;
         status.style.display = 'block';
         status.textContent = message;
         status.style.background = type === 'success' ? '#d4edda' : '#f8d7da';
         status.style.color = type === 'success' ? '#155724' : '#721c24';
         status.style.border = `1px solid ${type === 'success' ? '#c3e6cb' : '#f5c6cb'}`;
-        
-        // Auto-hide after 5 seconds
-        setTimeout(() => {
-            status.style.display = 'none';
-        }, 5000);
+        setTimeout(() => { status.style.display = 'none'; }, 5000);
     }
-</script>
+  </script>
 
   </body>
 </html>
